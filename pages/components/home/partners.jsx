@@ -8,7 +8,7 @@ export default function Partners() {
                             Making world-changing software is hard.
                         </h2>
                         <p className="mt-4 max-w-lg">
-                            That's why we like to appreciate
+                            That&apos;s why we like to appreciate
                             the organisations that make it a little easier for us.
                         </p>
                     </div>

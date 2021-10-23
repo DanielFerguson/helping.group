@@ -8,7 +8,7 @@ const navigation = [
     { name: 'Home', href: '#' },
     // { name: 'About', href: '/about' },
     { name: 'Initiatives', href: '#initiatives' },
-    { name: 'Team', href: '/team' },
+    // { name: 'Team', href: '/team' },
     { name: 'Media', href: '#media' },
 ]
 
@@ -150,7 +150,7 @@ export default function Hero() {
                 <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
                     <div className="text-center">
                         <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl max-w-2xl mx-auto">
-                            <span className="block xl:inline">We're creating change.</span>{' '}
+                            <span className="block xl:inline">We&apos;re creating change.</span>{' '}
                             <span className="block text-green-600 xl:inline">Meaningful change.</span>
                         </h1>
                         <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">

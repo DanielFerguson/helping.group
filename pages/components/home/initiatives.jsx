@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faRainbow, faFire, faQuestion } from '@fortawesome/pro-regular-svg-icons'
 
@@ -62,7 +63,7 @@ export default function Initiatives() {
                         <div key={link.name} className="flex flex-col bg-white rounded-2xl shadow-xl">
                             <div className="flex-1 relative pt-16 px-6 pb-8 md:px-8">
                                 <div className="absolute top-0 p-5 inline-block bg-green-600 rounded-xl shadow-lg transform -translate-y-1/2">
-                                    <FontAwesomeIcon icon={link.icon} size="lg" className="text-white" size="1x" aria-hidden="true" />
+                                    <FontAwesomeIcon icon={link.icon} size="lg" className="text-white" aria-hidden="true" />
                                 </div>
                                 <h3 className="text-xl font-medium text-gray-900">{link.name}</h3>
                                 <p className="mt-4 text-base text-gray-500">{link.description}</p>
@@ -70,9 +71,9 @@ export default function Initiatives() {
                             {
                                 link.href &&
                                 <div className="p-6 bg-gray-50 rounded-bl-2xl rounded-br-2xl md:px-8">
-                                    <a href={link.href} target="_blank" rel="noreferrer" className="text-base font-medium text-green-700 hover:text-green-600">
-                                        View <span aria-hidden="true"> &rarr;</span>
-                                    </a>
+                                    <Link href={link.href} target="_blank" rel="noreferrer" className="text-base font-medium text-green-700 hover:text-green-600">
+                                        <a>View <span aria-hidden="true"> &rarr;</span></a>
+                                    </Link>
                                 </div>
                             }
                         </div>
