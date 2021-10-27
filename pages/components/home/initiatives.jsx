@@ -12,7 +12,7 @@ const supportLinks = [
     {
         name: 'Rainbow Restoration',
         href: null,
-        description: '',
+        description: 'A trading card series project that will normalise the existence of LGBTQIA+ figures from across history.',
         icon: faRainbow,
     },
     {
