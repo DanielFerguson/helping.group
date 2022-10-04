@@ -1,31 +1,30 @@
 import Link from 'next/link'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faRainbow, faFire, faQuestion } from '@fortawesome/pro-regular-svg-icons'
+import { HomeIcon, ChatBubbleLeftRightIcon, FireIcon, GlobeAsiaAustraliaIcon } from '@heroicons/react/24/solid'
 
 const supportLinks = [
     {
         name: 'Helping Homes',
         href: 'https://helpinghomes.com.au',
         description: 'An open service to connect those that need emergency housing, with the people who can provide it. ',
-        icon: faHome,
+        icon: HomeIcon,
     },
     {
         name: 'Rainbow Restoration',
         href: null,
         description: 'A trading card series project that will normalise the existence of LGBTQIA+ figures from across history.',
-        icon: faRainbow,
+        icon: ChatBubbleLeftRightIcon,
     },
     {
         name: 'Our Move',
         href: 'https://ourmove.com.au',
         description: 'A communal platform uniting people from all areas to help prepare for upcoming fire seasons.',
-        icon: faFire,
+        icon: FireIcon,
     },
     {
         name: 'What\'s My Impact?',
         href: 'https://whatsmyimpact.com.au',
         description: 'Visualising how we are all changing the world through our investments to better align our values and investments.',
-        icon: faQuestion,
+        icon: GlobeAsiaAustraliaIcon,
     },
 ]
 
@@ -62,8 +61,8 @@ export default function Initiatives() {
                     {supportLinks.map((link) => (
                         <div key={link.name} className="flex flex-col bg-white rounded-2xl shadow-xl">
                             <div className="flex-1 relative pt-16 px-6 pb-8 md:px-8">
-                                <div className="absolute top-0 p-5 inline-block bg-green-600 rounded-xl shadow-lg transform -translate-y-1/2">
-                                    <FontAwesomeIcon icon={link.icon} size="lg" className="text-white" aria-hidden="true" />
+                                <div className="absolute top-0 p-4 inline-block bg-green-600 rounded-xl shadow-lg transform -translate-y-1/2">
+                                    <link.icon className='h-8 text-white' />
                                 </div>
                                 <h3 className="text-xl font-medium text-gray-900">{link.name}</h3>
                                 <p className="mt-4 text-base text-gray-500">{link.description}</p>
