@@ -223,6 +223,7 @@ test('structured data identifies the charity by its ABN', async ({ page }) => {
 
 test('the homepage never scrolls sideways', async ({ page }) => {
   await page.goto('/')
+  await page.evaluate(() => document.fonts.ready)
   const overflow = await page.evaluate(
     () =>
       document.documentElement.scrollWidth -

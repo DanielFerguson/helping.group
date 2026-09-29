@@ -1,4 +1,4 @@
-import { formatAbn } from '../lib/abn'
+import { formatAbn, isValidAbn } from '../lib/abn'
 
 export type ResponsiblePerson = {
   name: string
@@ -15,6 +15,9 @@ export type Supporter = {
 }
 
 const abn = '34726868010'
+if (!isValidAbn(abn)) {
+  throw new Error(`Helping Group's ABN (${abn}) fails the ABR checksum`)
+}
 const acncCharityUrl =
   'https://www.acnc.gov.au/charity/charities/e19a1344-f4b1-eb11-8236-000d3a6ab783'
 
@@ -27,8 +30,6 @@ export const organisation = {
   name: 'Helping Group',
   abn,
   abnDisplay: formatAbn(abn),
-  structure: 'Incorporated not-for-profit, Victoria',
-  taxStatus: 'Income tax exempt charity',
   contactEmail: 'contact@helping.group',
   acnc: {
     registeredOn: '2020-08-06',

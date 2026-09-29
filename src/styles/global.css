@@ -48,6 +48,10 @@
     outline: 3px solid var(--color-rust);
     outline-offset: 4px;
   }
+
+  .bg-leaf :focus-visible {
+    outline-color: var(--color-ink);
+  }
 }
 
 @layer components {

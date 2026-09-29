@@ -274,8 +274,6 @@ export const organisation = {
   name: 'Helping Group',
   abn,
   abnDisplay: formatAbn(abn),
-  structure: 'Incorporated not-for-profit, Victoria',
-  taxStatus: 'Income tax exempt charity',
   contactEmail: 'contact@helping.group',
   acnc: {
     registeredOn: '2020-08-06',
@@ -576,7 +574,7 @@ This drops `leaf-bright`, `sky`, `sun` and the two shadow tokens. None of them a
 - `.project-prose h2`: `font-weight: 700; letter-spacing: -0.035em`.
 - `::selection`: leaf background with ink text.
 - Delete `.civic-grid`, which is unused.
-- Keep the rust `:focus-visible` ring. It stays above 3:1 contrast on white, leaf and ink.
+- Keep the rust `:focus-visible` ring everywhere except inside `bg-leaf`. Rust on leaf is only 2.24:1, which fails WCAG 1.4.11, so add `.bg-leaf :focus-visible { outline-color: var(--color-ink) }` after the base rule to switch the ring to ink there.
 
 **Step 4: Leaf mark.** Create `public/icons/hg-leaf.svg`. Its paths are copied from `public/social-card.svg`:
 

@@ -93,4 +93,33 @@ describe('Helping Homes status presentation', () => {
       'Activated for Ballarat, Pyrenees.',
     )
   })
+
+  test('summarises an available standby service in one line', () => {
+    const status: StandbyStatus = {
+      ...base,
+      mode: 'standby',
+      serviceAvailability: 'available',
+    }
+
+    expect(getStatusPresentation(status).summary).toBe(
+      'Not activated right now. Ready when it is needed.',
+    )
+  })
+
+  test('summarises an activation while the app is unavailable', () => {
+    const status: ActivatedStatus = {
+      ...base,
+      mode: 'activated',
+      serviceAvailability: 'unavailable',
+      incident: {
+        name: 'Western District fires',
+        regions: ['Ballarat', 'Pyrenees'],
+        guidanceUrl: 'https://www.emergency.vic.gov.au/',
+      },
+    }
+
+    expect(getStatusPresentation(status).summary).toBe(
+      'Activated for Ballarat, Pyrenees. The app is temporarily unavailable, so use official emergency information.',
+    )
+  })
 })
