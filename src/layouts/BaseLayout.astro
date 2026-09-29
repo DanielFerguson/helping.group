@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets'
 import '../styles/global.css'
 import { socialLinks } from '../data/archive'
+import { organisation } from '../data/organisation'
 
 type Props = {
   title: string
@@ -25,16 +26,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
 const socialImage = new URL(image, Astro.site)
 const organisationData = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Helping Group',
+  '@type': 'NGO',
+  name: organisation.name,
   url: 'https://helping.group',
-  logo: 'https://helping.group/icons/hg-colour.png',
-  email: 'contact@helping.group',
-  founder: {
-    '@type': 'Person',
-    name: 'Daniel Ferguson',
+  logo: 'https://helping.group/icons/hg-logo-512.png',
+  email: organisation.contactEmail,
+  taxID: organisation.abnDisplay,
+  identifier: {
+    '@type': 'PropertyValue',
+    propertyID: 'ABN',
+    value: organisation.abn,
   },
-  sameAs: socialLinks.map((link) => link.url),
+  foundingDate: organisation.acnc.registeredOn,
+  areaServed: { '@type': 'Country', name: 'Australia' },
+  founder: { '@type': 'Person', name: 'Daniel Ferguson' },
+  sameAs: [organisation.acnc.profileUrl, ...socialLinks.map((link) => link.url)],
 }
 
 const additionalStructuredData = structuredData

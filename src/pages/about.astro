@@ -1,6 +1,8 @@
 ---
+import Governance from '../components/Governance.astro'
 import SiteFooter from '../components/SiteFooter.astro'
 import SiteHeader from '../components/SiteHeader.astro'
+import { organisation } from '../data/organisation'
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
@@ -85,16 +87,19 @@ import BaseLayout from '../layouts/BaseLayout.astro'
       <div class="shell grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:items-center lg:gap-24">
         <div class="mx-auto flex aspect-square w-full max-w-60 items-center justify-center rounded-xl border border-forest/12 bg-white p-10">
           <img
-            src="/icons/hg-colour.png"
+            src="/icons/hg-leaf.svg"
             alt="Helping Group"
-            width="79"
-            height="105"
+            width="32"
+            height="44"
             class="mx-auto h-full w-auto object-contain"
           />
         </div>
         <div>
           <p class="eyebrow">Founder-led story</p>
           <h2 class="section-title mt-5">Daniel Ferguson</h2>
+          <p class="mt-3 text-[0.8125rem] leading-tight font-semibold tracking-[0.08em] text-ink-soft uppercase">
+            President and founder
+          </p>
           <div class="mt-6 space-y-5 text-lg leading-8 text-ink-soft">
             <p>
               Daniel started Helping Homes after seeing the scale of
@@ -108,12 +113,14 @@ import BaseLayout from '../layouts/BaseLayout.astro'
               respond when circumstances require it.
             </p>
           </div>
-          <a class="button-secondary mt-8" href="mailto:contact@helping.group">
+          <a class="button-secondary mt-8" href={`mailto:${organisation.contactEmail}`}>
             Contact Helping Group
           </a>
         </div>
       </div>
     </section>
+
+    <Governance />
   </main>
   <SiteFooter />
 </BaseLayout>
