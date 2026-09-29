@@ -1,9 +1,18 @@
 import { expect, test } from 'bun:test'
-import { formatLongDate, formatLongDateTime } from '../../src/lib/format'
+import {
+  formatLongDate,
+  formatLongDateTime,
+  formatShortDate,
+} from '../../src/lib/format'
 
 test('formats ISO dates the way Australians read them', () => {
   expect(formatLongDate('2020-08-06')).toBe('6 August 2020')
   expect(formatLongDate('2026-07-27T11:54:10+10:00')).toBe('27 July 2026')
+})
+
+test('formats compact dates with an abbreviated month', () => {
+  expect(formatShortDate('2020-08-06')).toBe('6 Aug 2020')
+  expect(formatShortDate('2026-07-27T11:54:10+10:00')).toBe('27 Jul 2026')
 })
 
 test('formats a date and time in Melbourne time with the zone name', () => {

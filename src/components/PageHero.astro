@@ -1,11 +1,17 @@
 ---
 type Props = {
+  /** A newline starts a new line of the title; each line then wraps on its own. */
   title: string
   /** Stacked layouts only: show the aside between the lead and the actions. */
   asideBeforeActions?: boolean
+  /** Tailwind max-width class for the lead. Defaults to `max-w-[40rem]`. */
+  leadWidth?: string
+  /** Tailwind margin classes between the title and the lead row. Defaults follow the hero's content. */
+  rowSpacing?: string
 }
 
-const { title, asideBeforeActions = false } = Astro.props
+const { title, asideBeforeActions = false, leadWidth = 'max-w-[40rem]', rowSpacing } = Astro.props
+const titleLines = title.split('\n')
 const hasTop = Astro.slots.has('top')
 const hasLead = Astro.slots.has('default')
 const hasActions = Astro.slots.has('actions')
@@ -21,13 +27,20 @@ const lean = !hasActions && !hasAside
       id="page-title"
       class:list={['display-title display-title--page', hasTop && 'mt-5 sm:mt-7']}
     >
-      {title}
+      {titleLines.length > 1
+        ? titleLines.map((line, index) => (
+            <>
+              {index > 0 && ' '}
+              <span class="block">{line}</span>
+            </>
+          ))
+        : title}
     </h1>
     {(hasLead || hasActions || hasAside) && (
       <div
         class:list={[
-          'mt-5 grid gap-8 lg:gap-20',
-          lean ? 'sm:mt-10' : 'sm:mt-14',
+          'grid gap-8 lg:gap-20',
+          rowSpacing ?? (lean ? 'mt-5 sm:mt-10' : 'mt-5 sm:mt-14'),
           hasAside && 'lg:grid-cols-2',
         ]}
       >
@@ -39,7 +52,7 @@ const lean = !hasActions && !hasAside
             ]}
           >
             {hasLead && (
-              <div class="body-large max-w-[40rem]">
+              <div class:list={['body-large', leadWidth]}>
                 <slot />
               </div>
             )}

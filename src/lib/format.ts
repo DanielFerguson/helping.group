@@ -9,6 +9,18 @@ export function formatLongDate(isoDate: string): string {
   return longDate.format(new Date(isoDate))
 }
 
+const shortDate = new Intl.DateTimeFormat('en-AU', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'Australia/Melbourne',
+})
+
+/** e.g. `6 Aug 2020`, for compact records such as timelines. */
+export function formatShortDate(isoDate: string): string {
+  return shortDate.format(new Date(isoDate))
+}
+
 const time = new Intl.DateTimeFormat('en-AU', {
   hour: 'numeric',
   minute: '2-digit',

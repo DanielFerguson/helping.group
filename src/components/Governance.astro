@@ -18,7 +18,7 @@ const rowRule = tone === 'tint' ? 'border-line-strong' : 'border-line'
 >
   <div class="shell grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:items-end lg:gap-10">
     <div>
-      <p class="eyebrow">Governance</p>
+      <p class:list={['eyebrow', tone === 'white' && 'flex']}>Governance</p>
       <h2 id="governance-heading" class="section-title mt-5">Who’s accountable.</h2>
       <table class="mt-10 w-full text-left">
         <caption class="sr-only">

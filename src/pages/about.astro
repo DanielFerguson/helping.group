@@ -1,9 +1,92 @@
 ---
 import Governance from '../components/Governance.astro'
+import NumberedRows from '../components/NumberedRows.astro'
+import PageHero from '../components/PageHero.astro'
 import SiteFooter from '../components/SiteFooter.astro'
 import SiteHeader from '../components/SiteHeader.astro'
+import SplitSection from '../components/SplitSection.astro'
+import StatusLine from '../components/StatusLine.astro'
 import { organisation } from '../data/organisation'
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { formatLongDate, formatShortDate } from '../lib/format'
+
+const { acnc, charity } = organisation
+
+// Non-breaking spaces keep "Started in a" and "Kept small" together, so the
+// title breaks the same way on a phone as it does in the design.
+const heroTitle = 'Started in a crisis.\nKept small on purpose.'
+
+type DatedEntry = {
+  date: string
+  title: string
+  copy: string
+  tone?: 'archived' | 'standby'
+  tag?: string
+}
+
+const dated: DatedEntry[] = [
+  {
+    date: 'Summer 2019–20',
+    title: 'Helping Homes is built',
+    copy: 'It began during the bushfire season, as a way to connect people evacuating with spare accommodation.',
+  },
+  {
+    date: formatShortDate(acnc.registeredOn),
+    title: 'Registered with the ACNC',
+    copy: 'Helping Group becomes a registered charity, listed on the public ACNC register.',
+  },
+  {
+    date: '2020–21',
+    title: 'Other ideas explored, now archived',
+    copy: 'Rainbow Restoration, Our Move and What’s My Impact? followed Helping Homes. None is operating today.',
+    tone: 'archived',
+    tag: 'Archived',
+  },
+  {
+    date: 'Today',
+    title: 'Helping Homes on standby',
+    copy: 'The service is kept ready for the next emergency. It isn’t activated right now.',
+    tone: 'standby',
+    tag: 'On standby',
+  },
+]
+
+const workingPrinciples = [
+  {
+    title: 'Start with the practical problem',
+    copy: 'Technology matters only when it makes a difficult situation clearer or helps someone take a useful next step.',
+  },
+  {
+    title: 'Be explicit about status',
+    copy: 'We say when Helping Homes is on standby, when it is activated and when the app is unavailable.',
+  },
+  {
+    title: 'Respect official boundaries',
+    copy: 'Helping Homes connects community support. It doesn’t replace 000, emergency warnings or professional services.',
+  },
+]
+
+const registration = [
+  { label: 'ABN', value: organisation.abnDisplay },
+  { label: 'Registered with the ACNC', value: formatLongDate(acnc.registeredOn) },
+  { label: 'Charity size', value: charity.size },
+  {
+    label: 'Tax status',
+    value: charity.incomeTaxExempt ? 'Income tax exempt' : 'Not income tax exempt',
+  },
+  {
+    label: 'Deductible gift recipient',
+    value: charity.deductibleGiftRecipient ? 'Yes' : 'No',
+    note: charity.deductibleGiftRecipient ? undefined : 'Donations are not tax-deductible.',
+  },
+  { label: 'Last reported', value: formatLongDate(charity.lastReportedOn) },
+  { label: 'Next report due', value: formatLongDate(charity.nextReportDue) },
+]
+
+const registerLinks = [
+  { label: 'View our ACNC register entry', href: acnc.profileUrl },
+  { label: 'Look up our ABN', href: organisation.abnLookupUrl },
+]
 ---
 
 <BaseLayout
@@ -12,115 +95,149 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 >
   <SiteHeader />
   <main id="main-content">
-    <section class="border-b border-forest/10">
-      <div class="shell py-18 sm:py-24 lg:py-28">
-        <p class="eyebrow">About Helping Group</p>
-        <h1 class="display-title display-title--page mt-5">
-          A small idea built for a very real need.
-        </h1>
-        <p class="body-large mt-6 max-w-3xl">
-          Helping Group began during the 2019–20 Australian bushfires, when
-          thousands of people were making urgent decisions about where they
-          could go and what they could take with them.
+    <PageHero title={heroTitle} leadWidth="max-w-[42.5rem]" rowSpacing="mt-6 sm:mt-12">
+      <p slot="top" class="eyebrow flex">About · Since 2020</p>
+      Helping Group began during the 2019–20 Australian bushfires, when thousands of people were
+      making urgent decisions about where they could go and what they could take with them.
+    </PageHero>
+
+    <SplitSection
+      id="founder"
+      tone="tint"
+      eyebrow="How it began · Summer 2019–20"
+      title="Offers were everywhere. Finding them wasn’t."
+    >
+      <div class="space-y-4 text-base leading-[1.625rem] text-ink-soft sm:space-y-5 sm:text-lg sm:leading-[1.8125rem]">
+        <p>
+          The first version of Helping Homes connected people evacuating from fires with
+          Australians who had spare accommodation. It grew from a direct observation: people
+          wanted to help, but offers spread across social media and informal networks were
+          difficult to find at the moment they were needed.
+        </p>
+        <p>
+          Helping Group formed around that response. It later explored other project ideas, now
+          recorded in the archive, but Helping Homes is our continuing work.
         </p>
       </div>
-    </section>
 
-    <section class="section-space bg-paper-deep">
-      <div class="shell grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-        <div>
-          <p class="eyebrow">Why it started</p>
-          <h2 class="section-title mt-5">Making available help easier to find.</h2>
-        </div>
-        <div class="space-y-6 text-lg leading-8 text-ink-soft">
-          <p>
-            The first version of Helping Homes connected people evacuating from
-            fires with Australians who had spare accommodation. It grew from a
-            direct observation: people wanted to help, but offers spread across
-            social media and informal networks were difficult to find at the
-            moment they were needed.
+      <div class="mt-8 flex flex-col gap-2.5 border-t-2 border-ink pt-5 sm:mt-12 sm:gap-3.5 sm:pt-7">
+        <p class="text-xs leading-4 font-semibold tracking-[0.08em] text-ink-soft uppercase">
+          Founder’s note
+        </p>
+        <div class="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+          <p class="font-display text-[1.625rem] leading-[1.875rem] font-bold tracking-[-0.03em] sm:text-[1.75rem] sm:leading-8">
+            Daniel Ferguson
           </p>
-          <p>
-            Helping Group formed around that response. It later explored other
-            project ideas, now recorded in the archive, but Helping Homes is the
-            organisation’s continuing work.
-          </p>
-          <p>
-            The platform now supports offers of accommodation, paddock space
-            and transport. Between emergencies it remains on standby rather
-            than pretending there is always an active crisis to respond to.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-space">
-      <div class="shell">
-        <p class="eyebrow">How we work</p>
-        <h2 class="section-title mt-5">Useful before impressive.</h2>
-        <div class="mt-10 border-y border-forest/15">
-          {[
-            [
-              'Start with the practical problem',
-              'Technology matters only when it makes a difficult situation clearer or helps someone take a useful next step.',
-            ],
-            [
-              'Be explicit about status',
-              'A seasonal service should say when it is on standby, when it is activated and when its application is unavailable.',
-            ],
-            [
-              'Respect official boundaries',
-              'Helping Homes can connect community support. It does not replace 000, emergency warnings or professional services.',
-            ],
-          ].map(([title, copy], index) => (
-            <article class="grid gap-3 border-b border-forest/10 py-6 last:border-b-0 md:grid-cols-[0.12fr_0.55fr_1fr] md:gap-8">
-              <p class="text-sm font-medium text-forest">0{index + 1}</p>
-              <h3 class="text-xl font-semibold tracking-[-0.02em] text-ink">{title}</h3>
-              <p class="leading-7 text-ink-soft">{copy}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section id="founder" class="section-space scroll-mt-10 border-t border-forest/10 bg-paper-deep/50">
-      <div class="shell grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:items-center lg:gap-24">
-        <div class="mx-auto flex aspect-square w-full max-w-60 items-center justify-center rounded-xl border border-forest/12 bg-white p-10">
-          <img
-            src="/icons/hg-leaf.svg"
-            alt="Helping Group"
-            width="32"
-            height="44"
-            class="mx-auto h-full w-auto object-contain"
-          />
-        </div>
-        <div>
-          <p class="eyebrow">Founder-led story</p>
-          <h2 class="section-title mt-5">Daniel Ferguson</h2>
-          <p class="mt-3 text-[0.8125rem] leading-tight font-semibold tracking-[0.08em] text-ink-soft uppercase">
+          <span class="hidden font-semibold text-ink-soft sm:inline" aria-hidden="true">·</span>
+          <p class="text-[0.9375rem] leading-[1.375rem] text-ink-soft sm:text-base sm:leading-6">
             President and founder
           </p>
-          <div class="mt-6 space-y-5 text-lg leading-8 text-ink-soft">
-            <p>
-              Daniel started Helping Homes after seeing the scale of
-              displacement during the 2019–20 bushfires and asking whether a
-              simple digital service could connect evacuees with spare
-              accommodation.
-            </p>
-            <p>
-              Helping Group is kept deliberately focused today: maintain the
-              service, be honest about when it is active and make it ready to
-              respond when circumstances require it.
-            </p>
-          </div>
-          <a class="button-secondary mt-8" href={`mailto:${organisation.contactEmail}`}>
-            Contact Helping Group
-          </a>
         </div>
+        <p class="pt-1 leading-[1.625rem] sm:pt-0 sm:text-[1.0625rem] sm:leading-7">
+          Daniel started Helping Homes after seeing the scale of displacement during the 2019–20
+          bushfires and asking whether a simple digital service could connect evacuees with spare
+          accommodation. Helping Group is kept deliberately focused today: maintain the service,
+          be honest about when it is active, and be ready to respond when circumstances require
+          it.
+        </p>
       </div>
-    </section>
+    </SplitSection>
 
-    <Governance />
+    <SplitSection id="record" eyebrow="A dated record" title="What happened, and when.">
+      <ol class="ledger" data-testid="dated-record">
+        {dated.map((entry) => (
+          <li class="ledger-row flex flex-col gap-2.5 py-[1.375rem] md:grid md:grid-cols-[13.75rem_minmax(0,1fr)] md:items-start md:gap-x-8 md:py-7 lg:grid-cols-[12.5rem_minmax(0,1fr)] lg:gap-x-6 xl:grid-cols-[13.75rem_minmax(0,1fr)] xl:gap-x-8">
+            <div class="flex items-center justify-between md:flex-col md:items-start md:justify-start md:gap-2.5">
+              <p
+                class:list={[
+                  'font-display text-[1.625rem] leading-[1.875rem] font-bold tracking-[-0.03em] md:text-[1.75rem] md:leading-8 lg:text-2xl xl:text-[1.75rem]',
+                  entry.tone === 'archived' && 'text-ink-soft',
+                ]}
+              >
+                {entry.date}
+              </p>
+              {entry.tone && entry.tag && (
+                <StatusLine tone={entry.tone} as="div">
+                  {entry.tag}
+                </StatusLine>
+              )}
+            </div>
+            <div class="flex flex-col gap-1 md:gap-1.5">
+              <h3
+                class:list={[
+                  'text-lg leading-[1.625rem] font-semibold md:text-xl md:leading-7',
+                  entry.tone === 'archived' && 'text-ink-soft',
+                ]}
+              >
+                {entry.title}
+              </h3>
+              <p class="text-[0.9375rem] leading-[1.4375rem] text-ink-soft md:text-base md:leading-[1.5625rem]">
+                {entry.copy}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </SplitSection>
+
+    <SplitSection id="how-we-work" tone="tint" eyebrow="How we work" title="Useful before impressive.">
+      <NumberedRows items={workingPrinciples} onTint compact />
+    </SplitSection>
+
+    <Governance tone="white" />
+
+    <SplitSection id="registration" tone="tint" eyebrow="Registration record" title="Check it for yourself.">
+      <p slot="intro">
+        These details come from the ACNC Charity Register and the Australian Business Register,
+        where anyone can check them.
+      </p>
+
+      <div style="--ledger-line: var(--color-line-strong)">
+        <div
+          class="hidden pb-3 text-xs leading-4 font-semibold tracking-[0.08em] text-ink-soft uppercase md:flex"
+          aria-hidden="true"
+        >
+          <span class="w-75 shrink-0 lg:w-60 xl:w-75">Detail</span>
+          <span>As registered</span>
+        </div>
+        <dl class="ledger" data-testid="registration-record">
+          {registration.map((row) => (
+            <div class="ledger-row flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1.5 py-4 md:justify-start md:gap-x-0 md:py-[1.125rem]">
+              <dt class="text-[0.9375rem] leading-[1.375rem] text-ink-soft md:w-75 md:shrink-0 md:text-base md:leading-6 lg:w-60 xl:w-75">
+                {row.label}
+              </dt>
+              <dd class="text-base leading-[1.375rem] font-semibold md:text-lg md:leading-6">
+                {row.value}
+              </dd>
+              {row.note && (
+                <dd class="basis-full text-sm leading-5 text-ink-soft md:ml-3.5 md:basis-auto md:text-base md:leading-6">
+                  {row.note}
+                </dd>
+              )}
+            </div>
+          ))}
+        </dl>
+
+        <ul class="ledger mt-7 md:mt-3 md:flex md:flex-wrap md:gap-x-8 md:border-t-0">
+          {registerLinks.map((link) => (
+            <li class="ledger-row py-0 md:border-b-0">
+              <a
+                class="flex min-h-13 items-center justify-between gap-6 font-semibold text-forest md:inline-flex md:min-h-11 md:justify-start md:gap-1.5 md:text-[0.9375rem] md:underline md:decoration-forest/30 md:underline-offset-[5px] md:hover:decoration-forest"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  {link.label}
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </span>
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </SplitSection>
   </main>
   <SiteFooter />
 </BaseLayout>
