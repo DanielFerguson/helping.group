@@ -127,6 +127,61 @@ test('the mobile menu is keyboard safe', async ({ page }, testInfo) => {
   await expect(toggle).toBeFocused()
 })
 
+test('the open mobile menu keeps keyboard focus off the page behind it', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile')
+
+  await page.goto('/about')
+  const toggle = page.locator('[data-menu-toggle]')
+  const menu = page.getByRole('navigation', { name: 'Mobile' })
+  const expectPageInert = async (inert: boolean) => {
+    for (const behind of ['main', 'footer', '.skip-link']) {
+      await expect(page.locator(behind)).toHaveJSProperty('inert', inert)
+    }
+  }
+  // Focus may sit in the header, or leave the document (into the browser's
+  // own controls); it must never land in the page behind the menu.
+  const focusIsBehindMenu = () =>
+    page.evaluate(() => {
+      const active = document.activeElement
+      return (
+        active !== null &&
+        active !== document.body &&
+        active.closest('header') === null
+      )
+    })
+
+  await expectPageInert(false)
+  await toggle.click()
+  await expect(menu).toBeVisible()
+  await expectPageInert(true)
+
+  // Tab well past the last link in the menu.
+  const stops = (await menu.locator('a').count()) + 4
+  for (let index = 0; index < stops; index += 1) {
+    await page.keyboard.press('Tab')
+    expect(await focusIsBehindMenu()).toBe(false)
+  }
+
+  // Every way of closing the menu gives the page back.
+  await page.keyboard.press('Escape')
+  await expect(toggle).toBeFocused()
+  await expectPageInert(false)
+
+  await toggle.click()
+  await expectPageInert(true)
+  await toggle.click()
+  await expect(menu).toBeHidden()
+  await expectPageInert(false)
+
+  await toggle.click()
+  await expectPageInert(true)
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await expect(menu).toBeHidden()
+  await expectPageInert(false)
+})
+
 test.describe('accessibility', () => {
   for (const route of [...publicRoutes, '/this-page-does-not-exist']) {
     test(`${route} has no automatically detectable violations`, async ({

@@ -130,11 +130,21 @@ const path = Astro.url.pathname
 
   const root = document.documentElement
 
+  // The open menu covers the page, so keep keyboard focus (and assistive
+  // technology) away from the content behind it, including the skip link
+  // that would jump into it.
+  const setPageInert = (inert: boolean) => {
+    for (const element of document.querySelectorAll<HTMLElement>('main, footer, .skip-link')) {
+      element.inert = inert
+    }
+  }
+
   const closeMenu = (returnFocus = false) => {
     if (!toggle || !menu || !openIcon || !closeIcon) return
 
     menu.hidden = true
     root.classList.remove('menu-open')
+    setPageInert(false)
     openIcon.hidden = false
     closeIcon.hidden = true
     toggle.setAttribute('aria-expanded', 'false')
@@ -149,6 +159,7 @@ const path = Astro.url.pathname
     const opening = menu.hidden
     menu.hidden = !opening
     root.classList.toggle('menu-open', !menu.hidden)
+    setPageInert(!menu.hidden)
     openIcon.hidden = opening
     closeIcon.hidden = !opening
     toggle.setAttribute('aria-expanded', String(opening))
