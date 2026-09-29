@@ -64,6 +64,19 @@ links are curated in `src/data/archive.ts`.
 Only publish claims that can be traced to a listed source. Archived projects
 must not link to their former domains as active services.
 
+## Edit charity details
+
+Helping Group's verifiable facts live in `src/data/organisation.ts`: ABN, ACNC
+registration, responsible people, Acknowledgement of Country and early
+supporters. Every value must match the
+[ACNC Charity Register](https://www.acnc.gov.au/charity/charities/e19a1344-f4b1-eb11-8236-000d3a6ab783/profile)
+or the Australian Business Register.
+
+- When the board changes on the ACNC register, update `responsiblePeople`.
+- The build fails if the ABN does not pass the ABR checksum.
+- The site never asks for donations. Keep the public notice accurate if that
+  ever changes.
+
 ## Deployment
 
 Vercel builds the site with:
