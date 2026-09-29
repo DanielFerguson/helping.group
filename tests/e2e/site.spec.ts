@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { archiveArticles } from '../../src/data/archive'
 import { organisation } from '../../src/data/organisation'
 import { formatLongDate } from '../../src/lib/format'
 
@@ -78,18 +79,24 @@ test('archived projects do not link to retired service domains', async ({
   await expect(page.locator('a[href*="whatsmyimpact.com.au"]')).toHaveCount(0)
 })
 
-test('external links opened in a new tab are protected', async ({ page }) => {
-  await page.goto('/archive')
+test.describe('external links', () => {
+  for (const route of publicRoutes) {
+    test(`links opened in a new tab are protected on ${route}`, async ({
+      page,
+    }) => {
+      await page.goto(route)
 
-  const externalLinks = page.locator('a[target="_blank"]')
-  const count = await externalLinks.count()
-  expect(count).toBeGreaterThan(0)
+      const externalLinks = page.locator('a[target="_blank"]')
+      const count = await externalLinks.count()
+      expect(count).toBeGreaterThan(0)
 
-  for (let index = 0; index < count; index += 1) {
-    await expect(externalLinks.nth(index)).toHaveAttribute(
-      'rel',
-      /noopener.*noreferrer|noreferrer.*noopener/,
-    )
+      for (let index = 0; index < count; index += 1) {
+        await expect(externalLinks.nth(index)).toHaveAttribute(
+          'rel',
+          /noopener.*noreferrer|noreferrer.*noopener/,
+        )
+      }
+    })
   }
 })
 
@@ -364,6 +371,17 @@ test('/archive shows four articles and five press reports', async ({ page }) => 
   await page.goto('/archive')
 
   await expect(page.getByTestId('archive-articles').locator('li')).toHaveCount(4)
+  // The heading names the article; the new-tab hint belongs to the link only.
+  const articleHeadings = page
+    .getByTestId('archive-articles')
+    .getByRole('heading', { level: 3 })
+  await expect(articleHeadings).toHaveCount(4)
+  await expect(
+    articleHeadings.filter({ hasText: /opens in a new tab/ }),
+  ).toHaveCount(0)
+  for (const [index, article] of archiveArticles.entries()) {
+    await expect(articleHeadings.nth(index)).toHaveAccessibleName(article.title)
+  }
   const press = page.getByTestId('archive-press').locator('li')
   await expect(press).toHaveCount(5)
   await expect(page.getByTestId('archive-press').locator('img')).toHaveCount(5)

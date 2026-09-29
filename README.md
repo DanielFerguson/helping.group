@@ -85,8 +85,8 @@ or the Australian Business Register.
 
 - When the board changes on the ACNC register, update `responsiblePeople`.
 - After each Annual Information Statement, update `charity.lastReportedOn` and
-  `charity.nextReportDue` (shown on the About page). A unit test fails once
-  `nextReportDue` has passed, as a reminder.
+  `charity.nextReportDue` (shown on the About page). A unit test fails 30 days
+  after `nextReportDue`, as a reminder.
 - The build fails if the ABN does not pass the ABR checksum.
 - The site never asks for donations. Keep the public notice accurate if that
   ever changes.

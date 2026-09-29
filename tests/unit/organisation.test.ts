@@ -46,11 +46,14 @@ describe('organisation facts', () => {
     )
   })
 
-  test('the next report due date has not passed', () => {
+  test('the next report is no more than 30 days overdue', () => {
     // Deliberate yearly reminder: after each Annual Information Statement,
-    // update organisation.charity from the ACNC Charity Register.
-    expect(Date.parse(organisation.charity.nextReportDue)).toBeGreaterThan(
-      Date.now(),
-    )
+    // update organisation.charity from the ACNC Charity Register. The 30 day
+    // grace window allows for a late filing before this starts to fail.
+    const graceMs = 30 * 24 * 60 * 60 * 1000
+
+    expect(
+      Date.parse(organisation.charity.nextReportDue) + graceMs,
+    ).toBeGreaterThan(Date.now())
   })
 })
