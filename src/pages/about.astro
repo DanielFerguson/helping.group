@@ -6,21 +6,25 @@ import SiteFooter from '../components/SiteFooter.astro'
 import SiteHeader from '../components/SiteHeader.astro'
 import SplitSection from '../components/SplitSection.astro'
 import StatusLine from '../components/StatusLine.astro'
+import { helpingHomesStatus } from '../data/helping-homes-status'
 import { organisation } from '../data/organisation'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { formatLongDate, formatShortDate } from '../lib/format'
+import { getStatusPresentation } from '../lib/status'
 
 const { acnc, charity } = organisation
+const presentation = getStatusPresentation(helpingHomesStatus)
 
-// Non-breaking spaces keep "Started in a" and "Kept small" together, so the
-// title breaks the same way on a phone as it does in the design.
-const heroTitle = 'Started in a crisis.\nKept small on purpose.'
+// A newline starts a new line of the title (PageHero splits on it), one per
+// sentence. Non-breaking spaces keep "Started in a" and "Kept small" together,
+// so each sentence wraps on a phone as it does in the design.
+const heroTitle = 'Started\u00a0in\u00a0a crisis.\nKept\u00a0small on\u00a0purpose.'
 
 type DatedEntry = {
   date: string
   title: string
   copy: string
-  tone?: 'archived' | 'standby'
+  tone?: 'archived' | 'standby' | 'activated'
   tag?: string
 }
 
@@ -44,10 +48,10 @@ const dated: DatedEntry[] = [
   },
   {
     date: 'Today',
-    title: 'Helping Homes on standby',
-    copy: 'The service is kept ready for the next emergency. It isn’t activated right now.',
-    tone: 'standby',
-    tag: 'On standby',
+    title: presentation.timelineTitle,
+    copy: presentation.timelineSummary,
+    tone: presentation.tone,
+    tag: presentation.eyebrow,
   },
 ]
 

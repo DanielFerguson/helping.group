@@ -173,3 +173,100 @@ describe('Helping Homes status page content', () => {
     expect(officialLinks.slice(1)).toEqual(base.officialGuidance)
   })
 })
+
+describe('Helping Homes status-driven page behaviour', () => {
+  const incident = {
+    name: 'Western District fires',
+    regions: ['Ballarat', 'Pyrenees'],
+    guidanceUrl: 'https://www.emergency.vic.gov.au/',
+  }
+  const cases = {
+    'standby and available': {
+      ...base,
+      mode: 'standby',
+      serviceAvailability: 'available',
+    } satisfies StandbyStatus,
+    'standby and unavailable': {
+      ...base,
+      mode: 'standby',
+      serviceAvailability: 'unavailable',
+    } satisfies StandbyStatus,
+    'activated and available': {
+      ...base,
+      mode: 'activated',
+      serviceAvailability: 'available',
+      incident,
+    } satisfies ActivatedStatus,
+    'activated and unavailable': {
+      ...base,
+      mode: 'activated',
+      serviceAvailability: 'unavailable',
+      incident,
+    } satisfies ActivatedStatus,
+  }
+
+  test('the primary action is the service, contact or an unavailable notice', () => {
+    expect(getStatusPresentation(cases['standby and available']).primaryAction).toBe('service')
+    expect(getStatusPresentation(cases['standby and unavailable']).primaryAction).toBe('contact')
+    expect(getStatusPresentation(cases['activated and available']).primaryAction).toBe('service')
+    expect(getStatusPresentation(cases['activated and unavailable']).primaryAction).toBe(
+      'unavailable-notice',
+    )
+  })
+
+  test('the primary action always agrees with showServiceAction', () => {
+    for (const status of Object.values(cases)) {
+      const result = getStatusPresentation(status)
+
+      expect(result.primaryAction === 'service').toBe(result.showServiceAction)
+    }
+  })
+
+  test('official links sit above the action only while activated', () => {
+    expect(getStatusPresentation(cases['standby and available']).officialLinksAboveAction).toBe(false)
+    expect(getStatusPresentation(cases['standby and unavailable']).officialLinksAboveAction).toBe(false)
+    expect(getStatusPresentation(cases['activated and available']).officialLinksAboveAction).toBe(true)
+    expect(getStatusPresentation(cases['activated and unavailable']).officialLinksAboveAction).toBe(true)
+  })
+
+  test('a standby service leaves the lead to the page', () => {
+    expect(getStatusPresentation(cases['standby and available']).lead).toBeNull()
+    expect(getStatusPresentation(cases['standby and unavailable']).lead).toBeNull()
+  })
+
+  test('an activation with the app available leads with the description', () => {
+    const result = getStatusPresentation(cases['activated and available'])
+
+    expect(result.lead).toBe(result.description)
+    expect(result.lead).toContain('Check official warnings')
+  })
+
+  test('an activation with the app unavailable does not send people to the app', () => {
+    const { lead } = getStatusPresentation(cases['activated and unavailable'])
+
+    expect(lead).toBe('The service has been activated for Ballarat, Pyrenees.')
+    expect(lead).not.toContain('before using Helping Homes')
+  })
+
+  test('the About timeline describes a standby service as ready, not active', () => {
+    for (const key of ['standby and available', 'standby and unavailable'] as const) {
+      const result = getStatusPresentation(cases[key])
+
+      expect(result.timelineTitle).toBe('Helping Homes on standby')
+      expect(result.timelineSummary).toBe(
+        'The service is kept ready for the next emergency. It isn’t activated right now.',
+      )
+    }
+  })
+
+  test('the About timeline names the incident and regions while activated', () => {
+    for (const key of ['activated and available', 'activated and unavailable'] as const) {
+      const result = getStatusPresentation(cases[key])
+
+      expect(result.timelineTitle).toBe('Helping Homes is responding to Western District fires')
+      expect(result.timelineSummary).toBe(
+        'Activated for Ballarat, Pyrenees. See the Helping Homes page for the latest.',
+      )
+    }
+  })
+})

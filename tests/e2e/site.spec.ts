@@ -327,6 +327,7 @@ test('Helping Homes has its own service page', async ({ page }) => {
     /replace 000/,
   )
   await expect(page.getByTestId('season-steps').locator('li')).toHaveCount(3)
+  await expect(page.getByText('You are here')).toHaveCount(0)
 })
 
 for (const slug of archivedSlugs) {
@@ -375,6 +376,9 @@ test('/about shows the dated record and the registration record', async ({
 
   await expect(page.locator('#founder')).toBeVisible()
   await expect(page.getByTestId('dated-record').locator('li')).toHaveCount(4)
+  await expect(page.getByTestId('dated-record')).toContainText(
+    'Helping Homes on standby',
+  )
   const record = page.getByTestId('registration-record')
   await expect(record).toContainText(organisation.abnDisplay)
   await expect(record).toContainText(organisation.charity.size)

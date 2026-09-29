@@ -116,16 +116,16 @@ const projectData = {
         Helping Homes · {presentation.eyebrow}
       </StatusLine>
 
-      {activated ? presentation.description : standbyLead}
+      {presentation.lead ?? standbyLead}
 
       <Fragment slot="actions">
-        {activated && presentation.showServiceAction && (
+        {presentation.officialLinksAboveAction && presentation.primaryAction === 'service' && (
           <div>
             <p class="eyebrow flex pb-3.5" aria-hidden="true">Official warnings</p>
             <SourceList links={officialLinks} label="Official warnings" />
           </div>
         )}
-        {presentation.showServiceAction ? (
+        {presentation.primaryAction === 'service' ? (
           <a
             class="button-primary sm:w-80"
             href={helpingHomesStatus.serviceUrl}
@@ -139,7 +139,7 @@ const projectData = {
             </span>
             <span class="arrow text-leaf" aria-hidden="true">↗</span>
           </a>
-        ) : activated ? (
+        ) : presentation.primaryAction === 'unavailable-notice' ? (
           <NoticeBlock
             size="page"
             variant="activated"
