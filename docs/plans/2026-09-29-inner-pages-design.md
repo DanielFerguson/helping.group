@@ -149,7 +149,7 @@ A full-height ink or white panel below the header. It lists the nav items at a g
 
 1. How activation is decided, and who decides. Leave it out of the page until it's confirmed.
 2. Whether the Helping Homes app shows its map while on standby.
-3. The email mismatch between the ACNC register and the site. This is carried over from the homepage plan.
+3. ~~The email mismatch between the ACNC register and the site.~~ Resolved in `0b91a94`: the site now uses `contact@helpinggroup.com.au`. The homepage Paper artboards still show the old address. Fix it in any node cloned from them, and on the homepage artboards when convenient.
 
 ---
 
