@@ -1,5 +1,7 @@
 ---
-import Logo from '../components/Logo.astro'
+import PageHero from '../components/PageHero.astro'
+import SiteFooter from '../components/SiteFooter.astro'
+import SiteHeader from '../components/SiteHeader.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
@@ -8,27 +10,33 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   description="The page you were looking for could not be found."
   noIndex
 >
-  <main id="main-content" class="flex min-h-screen items-center py-16">
-    <div class="shell">
-      <div class="mx-auto max-w-2xl border-y border-forest/15 py-10 text-center sm:py-14">
-        <a href="/" aria-label="Helping Group home" class="inline-flex">
-          <Logo />
-        </a>
-        <p class="mt-10 text-sm font-semibold text-forest">
-          Error 404
-        </p>
-        <h1 class="display-title display-title--page mx-auto mt-5">
-          This page isn’t here.
-        </h1>
-        <p class="body-large mx-auto mt-6 max-w-xl">
-          The link may be old, or the page may have moved into the project
-          archive.
-        </p>
-        <div class="mt-9 flex flex-wrap justify-center gap-3">
-          <a class="button-primary" href="/">Return home</a>
-          <a class="button-secondary" href="/projects">Browse projects</a>
+  <SiteHeader />
+  {/* The page gets its height from padding: a little more than a regular hero, so it feels complete. */}
+  <main id="main-content" class="pt-4 pb-5 sm:pt-8 sm:pb-8">
+    <PageHero title="This page isn’t here." leadWidth="max-w-[45rem]" rowSpacing="mt-5 sm:mt-8">
+      <p slot="top" class="eyebrow flex">Error 404</p>
+      The link may be old, or the page may have moved into the project archive.
+
+      <Fragment slot="actions">
+        <div class="flex flex-col gap-2.5 pt-1 sm:flex-row sm:gap-3 lg:pt-2">
+          <a class="button-primary sm:w-60" href="/">
+            <span>Return home</span>
+            <span class="arrow text-leaf" aria-hidden="true">→</span>
+          </a>
+          <a class="button-secondary sm:w-60" href="/projects">
+            <span>Browse projects</span>
+            <span class="arrow text-ink-soft" aria-hidden="true">→</span>
+          </a>
         </div>
-      </div>
-    </div>
+        <p
+          data-testid="emergency-line"
+          class="mt-2 flex items-center gap-2 border-t-2 border-ink pt-5 text-sm leading-5 font-medium sm:mt-6 sm:max-w-[30.75rem] sm:gap-2.5"
+        >
+          <strong class="font-display text-[0.9375rem] leading-5 font-bold text-rust sm:text-base">000</strong>
+          <span>In immediate danger? Call 000 first.</span>
+        </p>
+      </Fragment>
+    </PageHero>
   </main>
+  <SiteFooter />
 </BaseLayout>
