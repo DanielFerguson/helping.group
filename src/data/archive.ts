@@ -9,6 +9,10 @@ export type ArchiveArticle = {
 export type PressItem = {
   name: string
   logo: string
+  logoWidth: number
+  logoHeight: number
+  /** Rendered height in px, tuned so logos look optically even. */
+  displayHeight: number
   url: string
   description: string
 }
@@ -52,30 +56,45 @@ export const verifiedPress: PressItem[] = [
   {
     name: 'The Courier',
     logo: '/logos/courier.png',
+    logoWidth: 716,
+    logoHeight: 130,
+    displayHeight: 28,
     url: 'https://www.thecourier.com.au/story/6566053/new-website-offers-places-to-stay-for-families-devastated-by-fire/',
     description: 'Emergency accommodation for families affected by fire',
   },
   {
     name: '9Now',
     logo: '/logos/9now.png',
+    logoWidth: 639,
+    logoHeight: 138,
+    displayHeight: 30,
     url: 'https://9now.nine.com.au/the-block/bushfires-australia-how-to-find-accommodation-offer-room-airbnb-findabed/10eb03d3-51b3-4455-af42-f1a57440144b',
     description: 'Ways Australians could offer accommodation during the fires',
   },
   {
     name: 'Australian Financial Review',
     logo: '/logos/afr.png',
+    logoWidth: 710,
+    logoHeight: 78,
+    displayHeight: 18,
     url: 'https://www.afr.com/politics/federal/nsw-government-calls-for-holiday-home-owners-to-open-doors-to-evacuees-20200114-p53r91',
     description: 'Holiday homes and emergency accommodation for evacuees',
   },
   {
     name: 'Stock & Land',
     logo: '/logos/stock-and-land.png',
+    logoWidth: 722,
+    logoHeight: 104,
+    displayHeight: 24,
     url: 'https://www.stockandland.com.au/story/6570125/fire-victims-need-cash-not-goods-as-new-fund-established/',
     description: 'Practical assistance for people affected by fire',
   },
   {
     name: 'Student Edge',
     logo: '/logos/student-edge.png',
+    logoWidth: 389,
+    logoHeight: 200,
+    displayHeight: 44,
     url: 'https://studentedge.org/article/where-to-find-emergency-accommodation-if-youre-impacted-by-australias-busfires',
     description: 'Where to find emergency accommodation during bushfires',
   },
