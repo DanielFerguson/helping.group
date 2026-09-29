@@ -1,0 +1,9 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" fill="#D8E8EB"/>
+  <circle cx="940" cy="150" r="84" fill="#EFBC63"/>
+  <path d="M0 470L250 260L480 455L690 220L920 440L1200 250V750H0V470Z" fill="#5F963F"/>
+  <path d="M0 565L250 390L470 540L715 330L930 540L1200 370V750H0V565Z" fill="#173F2A"/>
+  <path d="M520 750C530 635 604 591 650 529C704 456 712 375 690 220" stroke="#F7F4EA" stroke-width="54" stroke-linecap="round"/>
+  <path d="M520 750C530 635 604 591 650 529C704 456 712 375 690 220" stroke="#EFBC63" stroke-width="5" stroke-dasharray="15 18"/>
+  <text x="80" y="100" font-family="Avenir Next, Segoe UI, sans-serif" font-size="25" font-weight="700" fill="#173F2A" letter-spacing="5">PREPARATION · COMMUNITY · ARCHIVE</text>
+</svg>

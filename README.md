@@ -1,34 +1,93 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Helping Group
 
-## Getting Started
+The public website for Helping Group, the Australian not-for-profit behind
+[Helping Homes](https://helping.group/projects/helping-homes).
 
-First, run the development server:
+The site is built with Astro and is fully static. Helping Homes' operational
+state is kept in the repository so the public message can be changed and
+deployed quickly during an emergency.
+
+## Requirements
+
+- [Bun 1.4.2](https://bun.sh/)
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
+bun install
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Astro serves the site at `http://localhost:4321`.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Quality checks
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+bun run check
+bun run lint
+bun run test:unit
+bun run test:e2e
+bun run build
+bun outdated
+bun audit
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`test:e2e` builds the site and tests the production preview at desktop and
+mobile viewport sizes.
 
-## Learn More
+`overrides` in `package.json` pin a few transitive dependencies to versions
+that fix published advisories. Re-run `bun audit` after each upgrade and remove
+an override once its parent package no longer needs it.
 
-To learn more about Next.js, take a look at the following resources:
+TypeScript stays on 6.x for now because `astro check` does not yet support
+TypeScript 7.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Change the Helping Homes status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Edit `src/data/helping-homes-status.ts`.
 
-## Deploy on Vercel
+- `mode: "standby"` is the normal state between emergency activations.
+- `mode: "activated"` requires an incident name, affected regions and an
+  official guidance URL.
+- `serviceAvailability` is separate from the operational mode. Set it to
+  `"unavailable"` if the Helping Homes application is not healthy; the group
+  site will hide the outbound service action automatically.
+- Update `lastUpdated` whenever the status changes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Run all quality checks, review the Vercel preview, then promote the deployment.
+Do not describe Helping Homes as an emergency service. People in immediate
+danger must be directed to call 000 and follow official emergency advice.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Edit project content
+
+Project case studies live in `src/content/projects`. Their frontmatter is
+validated by `src/content.config.ts`. Historical articles and verified press
+links are curated in `src/data/archive.ts`.
+
+Only publish claims that can be traced to a listed source. Archived projects
+must not link to their former domains as active services.
+
+## Edit charity details
+
+Helping Group's verifiable facts live in `src/data/organisation.ts`: ABN, ACNC
+registration, responsible people, Acknowledgement of Country and early
+supporters. Every value must match the
+[ACNC Charity Register](https://www.acnc.gov.au/charity/charities/e19a1344-f4b1-eb11-8236-000d3a6ab783/profile)
+or the Australian Business Register.
+
+- When the board changes on the ACNC register, update `responsiblePeople`.
+- The build fails if the ABN does not pass the ABR checksum.
+- The site never asks for donations. Keep the public notice accurate if that
+  ever changes.
+
+## Deployment
+
+Vercel builds the site with:
+
+```bash
+bunx bun@1.4.2 install --frozen-lockfile
+bunx bun@1.4.2 run build
+```
+
+The explicit wrapper is needed because Vercel otherwise chooses the current
+platform-managed Bun 1.x patch. The output directory is `dist`.

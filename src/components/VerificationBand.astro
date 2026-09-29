@@ -1,0 +1,57 @@
+---
+import { organisation } from '../data/organisation'
+import { formatLongDate } from '../lib/format'
+
+const registeredOn = formatLongDate(organisation.acnc.registeredOn)
+const facts = [
+  {
+    value: organisation.acnc.registeredOn.slice(0, 4),
+    label: `Registered with the ACNC on ${registeredOn}`,
+  },
+  {
+    value: '$0',
+    label: 'What we’ll ever ask you for. We don’t fundraise, and Helping Homes is free.',
+  },
+]
+---
+
+<section class="bg-leaf text-ink" aria-labelledby="verification-heading" data-testid="verification-band">
+  <div class="shell grid gap-6 py-10 xl:grid-cols-[11rem_minmax(0,1fr)_minmax(0,1.3fr)_13rem] xl:gap-0 xl:py-14">
+    <div class="flex items-center justify-between xl:flex-col xl:items-start xl:pr-8">
+      <h2 id="verification-heading" class="text-[0.8125rem] font-bold tracking-[0.08em] uppercase">
+        Verified charity
+      </h2>
+      <a class="rounded-full bg-white p-1" href={organisation.acnc.profileUrl} target="_blank" rel="noopener noreferrer">
+        <img
+          src="/icons/acnc.png"
+          alt="ACNC Registered Charity tick: view our Charity Register entry (opens in a new tab)"
+          width="288"
+          height="288"
+          class="size-16 xl:size-22"
+        />
+      </a>
+    </div>
+
+    <dl class="contents">
+      {facts.map((fact) => (
+        <div class="flex flex-col gap-1 border-t border-ink/25 pt-4 xl:border-t-0 xl:border-l xl:px-8 xl:pt-0">
+          <dt class="order-2 text-[0.9375rem] leading-6 font-medium xl:text-base">{fact.label}</dt>
+          <dd class="order-1 font-display text-4xl leading-none font-bold tracking-[-0.04em] whitespace-nowrap tabular-nums xl:text-[length:min(3rem,3.5vw)]">
+            {fact.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="grid grid-cols-2 gap-2.5 pt-2 xl:flex xl:flex-col xl:justify-end xl:border-l xl:border-ink/25 xl:pt-0 xl:pl-8">
+      <a class="button-ink whitespace-nowrap" href={organisation.acnc.profileUrl} target="_blank" rel="noopener noreferrer">
+        ACNC register <span class="text-leaf" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new tab)</span>
+      </a>
+      <a class="button-outline-ink whitespace-nowrap" href={organisation.abnLookupUrl} target="_blank" rel="noopener noreferrer">
+        ABN Lookup <span aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new tab)</span>
+      </a>
+    </div>
+  </div>
+</section>

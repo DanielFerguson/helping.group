@@ -1,0 +1,126 @@
+---
+import Governance from '../components/Governance.astro'
+import SiteFooter from '../components/SiteFooter.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import { organisation } from '../data/organisation'
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="About"
+  description="How Helping Group began with Helping Homes during the 2019–20 Australian bushfires, and why the service remains ready to activate."
+>
+  <SiteHeader />
+  <main id="main-content">
+    <section class="border-b border-forest/10">
+      <div class="shell py-18 sm:py-24 lg:py-28">
+        <p class="eyebrow">About Helping Group</p>
+        <h1 class="display-title display-title--page mt-5">
+          A small idea built for a very real need.
+        </h1>
+        <p class="body-large mt-6 max-w-3xl">
+          Helping Group began during the 2019–20 Australian bushfires, when
+          thousands of people were making urgent decisions about where they
+          could go and what they could take with them.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-space bg-paper-deep">
+      <div class="shell grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
+        <div>
+          <p class="eyebrow">Why it started</p>
+          <h2 class="section-title mt-5">Making available help easier to find.</h2>
+        </div>
+        <div class="space-y-6 text-lg leading-8 text-ink-soft">
+          <p>
+            The first version of Helping Homes connected people evacuating from
+            fires with Australians who had spare accommodation. It grew from a
+            direct observation: people wanted to help, but offers spread across
+            social media and informal networks were difficult to find at the
+            moment they were needed.
+          </p>
+          <p>
+            Helping Group formed around that response. It later explored other
+            project ideas, now recorded in the archive, but Helping Homes is the
+            organisation’s continuing work.
+          </p>
+          <p>
+            The platform now supports offers of accommodation, paddock space
+            and transport. Between emergencies it remains on standby rather
+            than pretending there is always an active crisis to respond to.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space">
+      <div class="shell">
+        <p class="eyebrow">How we work</p>
+        <h2 class="section-title mt-5">Useful before impressive.</h2>
+        <div class="mt-10 border-y border-forest/15">
+          {[
+            [
+              'Start with the practical problem',
+              'Technology matters only when it makes a difficult situation clearer or helps someone take a useful next step.',
+            ],
+            [
+              'Be explicit about status',
+              'A seasonal service should say when it is on standby, when it is activated and when its application is unavailable.',
+            ],
+            [
+              'Respect official boundaries',
+              'Helping Homes can connect community support. It does not replace 000, emergency warnings or professional services.',
+            ],
+          ].map(([title, copy], index) => (
+            <article class="grid gap-3 border-b border-forest/10 py-6 last:border-b-0 md:grid-cols-[0.12fr_0.55fr_1fr] md:gap-8">
+              <p class="text-sm font-medium text-forest">0{index + 1}</p>
+              <h3 class="text-xl font-semibold tracking-[-0.02em] text-ink">{title}</h3>
+              <p class="leading-7 text-ink-soft">{copy}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="founder" class="section-space scroll-mt-10 border-t border-forest/10 bg-paper-deep/50">
+      <div class="shell grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:items-center lg:gap-24">
+        <div class="mx-auto flex aspect-square w-full max-w-60 items-center justify-center rounded-xl border border-forest/12 bg-white p-10">
+          <img
+            src="/icons/hg-leaf.svg"
+            alt="Helping Group"
+            width="32"
+            height="44"
+            class="mx-auto h-full w-auto object-contain"
+          />
+        </div>
+        <div>
+          <p class="eyebrow">Founder-led story</p>
+          <h2 class="section-title mt-5">Daniel Ferguson</h2>
+          <p class="mt-3 text-[0.8125rem] leading-tight font-semibold tracking-[0.08em] text-ink-soft uppercase">
+            President and founder
+          </p>
+          <div class="mt-6 space-y-5 text-lg leading-8 text-ink-soft">
+            <p>
+              Daniel started Helping Homes after seeing the scale of
+              displacement during the 2019–20 bushfires and asking whether a
+              simple digital service could connect evacuees with spare
+              accommodation.
+            </p>
+            <p>
+              Helping Group is kept deliberately focused today: maintain the
+              service, be honest about when it is active and make it ready to
+              respond when circumstances require it.
+            </p>
+          </div>
+          <a class="button-secondary mt-8" href={`mailto:${organisation.contactEmail}`}>
+            Contact Helping Group
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <Governance />
+  </main>
+  <SiteFooter />
+</BaseLayout>

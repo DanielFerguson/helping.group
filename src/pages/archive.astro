@@ -1,0 +1,87 @@
+---
+import SiteFooter from '../components/SiteFooter.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import { archiveArticles, verifiedPress } from '../data/archive'
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Archive"
+  description="Original Helping Group articles and verified contemporary coverage documenting the creation of Helping Homes."
+>
+  <SiteHeader />
+  <main id="main-content">
+    <section class="border-b border-forest/10">
+      <div class="shell py-18 sm:py-24 lg:py-28">
+        <p class="eyebrow">Archive</p>
+        <h1 class="display-title display-title--page mt-5">The record behind the work.</h1>
+        <p class="body-large mt-6 max-w-3xl">
+          Helping Group’s early articles and contemporary reporting capture the
+          context in which Helping Homes was built. They are preserved as
+          historical sources rather than rewritten as current news.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-space">
+      <div class="shell grid gap-12 lg:grid-cols-[0.55fr_1.45fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">Original articles</p>
+          <h2 class="section-title mt-5">In our own words.</h2>
+        </div>
+        <div class="divide-y divide-forest/15 border-y border-forest/15">
+          {archiveArticles.map((article) => (
+            <a
+              class="group grid gap-4 py-7 sm:grid-cols-[0.55fr_1.45fr] sm:gap-8"
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <p class="text-xs font-semibold tracking-[0.04em] text-forest">
+                  {article.category}
+                </p>
+                <p class="mt-2 text-sm text-ink-soft">{article.date}</p>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold tracking-[-0.02em] text-ink group-hover:text-forest">
+                  {article.title}
+                  <span class="arrow ml-2 inline-block text-forest" aria-hidden="true">↗</span>
+                </h3>
+                <p class="mt-3 leading-7 text-ink-soft">{article.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space bg-paper-deep">
+      <div class="shell">
+        <p class="eyebrow">Contemporary reporting</p>
+        <h2 class="section-title mt-5">How Helping Homes was described at the time.</h2>
+        <p class="body-large mt-6 max-w-3xl">
+          These links were rechecked before inclusion. Coverage is presented
+          for historical evidence and does not imply a continuing partnership.
+        </p>
+        <div class="mt-10 border-t border-forest/15">
+          {verifiedPress.map((item) => (
+            <a
+              class="group grid gap-3 border-b border-forest/15 py-5 sm:grid-cols-[0.4fr_1fr_auto] sm:items-center sm:gap-8"
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3 class="font-semibold text-ink">{item.name}</h3>
+              <p class="text-sm leading-6 text-ink-soft">{item.description}</p>
+              <span class="inline-flex text-sm font-medium text-forest">
+                Read <span class="arrow ml-2" aria-hidden="true">↗</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
