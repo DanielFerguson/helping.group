@@ -1,0 +1,36 @@
+---
+type Props = { title: string }
+
+const { title } = Astro.props
+const hasTop = Astro.slots.has('top')
+const hasLead = Astro.slots.has('default')
+const hasActions = Astro.slots.has('actions')
+const hasAside = Astro.slots.has('aside')
+---
+
+<section aria-labelledby="page-title">
+  <div class="shell pt-10 pb-11 sm:pt-20 sm:pb-24">
+    <slot name="top" />
+    <h1
+      id="page-title"
+      class:list={['display-title display-title--page', hasTop && 'mt-5 sm:mt-7']}
+    >
+      {title}
+    </h1>
+    {(hasLead || hasActions || hasAside) && (
+      <div class:list={['mt-5 grid gap-8 sm:mt-14 lg:gap-20', hasAside && 'lg:grid-cols-2']}>
+        {(hasLead || hasActions) && (
+          <div class="flex flex-col gap-7 lg:gap-8">
+            {hasLead && (
+              <div class="body-large max-w-[38rem]">
+                <slot />
+              </div>
+            )}
+            <slot name="actions" />
+          </div>
+        )}
+        <slot name="aside" />
+      </div>
+    )}
+  </div>
+</section>

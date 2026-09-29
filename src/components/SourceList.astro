@@ -1,0 +1,25 @@
+---
+type Link = { label: string; href: string; external?: boolean }
+type Props = { links: Link[]; label?: string }
+
+const { links, label } = Astro.props
+---
+
+<ul class="ledger" aria-label={label}>
+  {links.map((link) => (
+    <li class="border-b border-line">
+      <a
+        class="flex min-h-14 items-center justify-between gap-6 py-[1.125rem] leading-[1.375rem] font-semibold text-forest"
+        href={link.href}
+        target={link.external ? '_blank' : undefined}
+        rel={link.external ? 'noopener noreferrer' : undefined}
+      >
+        <span>
+          {link.label}
+          {link.external && <span class="sr-only"> (opens in a new tab)</span>}
+        </span>
+        <span class="arrow" aria-hidden="true">{link.external ? '↗' : '→'}</span>
+      </a>
+    </li>
+  ))}
+</ul>

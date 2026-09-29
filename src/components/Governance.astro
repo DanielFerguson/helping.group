@@ -1,8 +1,21 @@
 ---
 import { organisation } from '../data/organisation'
+import NoticeBlock from './NoticeBlock.astro'
+
+type Props = { tone?: 'tint' | 'white' }
+
+const { tone = 'tint' } = Astro.props
+const rowRule = tone === 'tint' ? 'border-line-strong' : 'border-line'
 ---
 
-<section id="governance" class="section-space scroll-mt-8 bg-paper-deep" aria-labelledby="governance-heading">
+<section
+  id="governance"
+  class:list={[
+    'scroll-mt-8',
+    tone === 'tint' ? 'section-space bg-paper-deep' : 'section-space-inner bg-paper',
+  ]}
+  aria-labelledby="governance-heading"
+>
   <div class="shell grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:items-end lg:gap-10">
     <div>
       <p class="eyebrow">Governance</p>
@@ -19,7 +32,7 @@ import { organisation } from '../data/organisation'
         </thead>
         <tbody>
           {organisation.responsiblePeople.map((person) => (
-            <tr class="border-b border-line-strong">
+            <tr class:list={['border-b', rowRule]}>
               <th scope="row" class="py-5 pr-6 text-lg font-semibold text-ink">{person.name}</th>
               <td class="py-5 text-ink-soft">{person.role}</td>
             </tr>
@@ -34,19 +47,24 @@ import { organisation } from '../data/organisation'
       </a>
     </div>
 
-    <aside class="border-t-[6px] border-ink bg-white p-7 sm:p-8" aria-labelledby="donations-notice-heading" data-testid="donations-notice">
-      <p class="text-[0.8125rem] font-bold tracking-[0.08em] uppercase">Public notice</p>
-      <h3 id="donations-notice-heading" class="mt-4 font-display text-[1.75rem] leading-tight font-bold tracking-[-0.03em]">
-        We never ask for donations.
-      </h3>
-      <p class="mt-3.5 leading-7 text-ink-soft">
+    <NoticeBlock
+      testid="donations-notice"
+      headingId="donations-notice-heading"
+      title="We never ask for donations."
+      surface={tone === 'white' ? 'tint' : 'white'}
+    >
+      <p>
         Helping Group doesn’t fundraise from the public, and Helping Homes is,
         and always will be, free to use. If anyone asks you for money in our
         name, it isn’t us. Please tell us.
       </p>
-      <a class="text-link mt-5" href={`mailto:${organisation.contactEmail}?subject=Report%20a%20donation%20request`}>
+      <a
+        slot="actions"
+        class="text-link mt-5"
+        href={`mailto:${organisation.contactEmail}?subject=Report%20a%20donation%20request`}
+      >
         Report it to {organisation.contactEmail}
       </a>
-    </aside>
+    </NoticeBlock>
   </div>
 </section>

@@ -1,0 +1,44 @@
+---
+type Props = {
+  variant?: 'standard' | 'activated' | 'muted'
+  surface?: 'white' | 'tint'
+  title: string
+  headingId: string
+  label?: string
+  testid?: string
+  level?: 'h2' | 'h3'
+}
+
+const {
+  variant = 'standard',
+  surface = 'white',
+  title,
+  headingId,
+  label = 'Public notice',
+  testid,
+  level: Heading = 'h3',
+} = Astro.props
+const rule = { standard: 'border-ink', activated: 'border-rust', muted: 'border-line' }[variant]
+const labelColour = { standard: 'text-ink', activated: 'text-rust', muted: 'text-ink-soft' }[variant]
+---
+
+<aside
+  class:list={['border-t-[6px] p-7 sm:p-8', rule, surface === 'tint' ? 'bg-paper-deep' : 'bg-white']}
+  aria-labelledby={headingId}
+  data-testid={testid}
+>
+  <p class:list={['text-[0.8125rem] font-bold tracking-[0.08em] uppercase', labelColour]}>
+    {label}
+  </p>
+  <Heading
+    id={headingId}
+    class:list={[
+      'mt-4 font-display text-[1.75rem] leading-tight font-bold tracking-[-0.03em]',
+      variant === 'muted' ? 'text-ink-soft' : 'text-ink',
+    ]}
+  >
+    {title}
+  </Heading>
+  <div class="mt-3.5 space-y-4 leading-7 text-ink-soft"><slot /></div>
+  <slot name="actions" />
+</aside>

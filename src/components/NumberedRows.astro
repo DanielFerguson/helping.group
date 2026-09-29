@@ -1,0 +1,23 @@
+---
+type Item = { title: string; copy: string }
+type Props = { items: Item[]; onTint?: boolean }
+
+const { items, onTint = false } = Astro.props
+---
+
+<ol class="ledger">
+  {items.map((item, index) => (
+    <li
+      class="ledger-row grid grid-cols-[1.75rem_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2.5 py-6 md:grid-cols-[3rem_minmax(0,16.25rem)_minmax(0,1fr)] md:gap-x-8 md:py-7 lg:grid-cols-[2.5rem_minmax(0,12rem)_minmax(0,1fr)] lg:gap-x-6 xl:grid-cols-[3rem_minmax(0,16.25rem)_minmax(0,1fr)] xl:gap-x-8"
+      style={onTint ? '--ledger-line: var(--color-line-strong)' : undefined}
+    >
+      <span class="font-display text-lg leading-7 font-bold text-forest md:text-xl" aria-hidden="true">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <h3 class="font-display text-[1.625rem] leading-[1.15] font-bold tracking-[-0.03em] md:text-[2rem] md:leading-[1.125] lg:text-[1.625rem] lg:leading-[1.15] xl:text-[2rem] xl:leading-[1.125]">
+        {item.title}
+      </h3>
+      <p class="col-start-2 leading-[1.5625rem] text-ink-soft md:col-start-auto">{item.copy}</p>
+    </li>
+  ))}
+</ol>
