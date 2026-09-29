@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 import { organisation } from '../../src/data/organisation'
+import { formatLongDate } from '../../src/lib/format'
 
 const publicRoutes = [
   '/',
@@ -127,13 +128,7 @@ test('the mobile menu is keyboard safe', async ({ page }, testInfo) => {
 })
 
 test.describe('accessibility', () => {
-  for (const route of [
-    '/',
-    '/about',
-    '/projects',
-    '/projects/helping-homes',
-    '/archive',
-  ]) {
+  for (const route of [...publicRoutes, '/this-page-does-not-exist']) {
     test(`${route} has no automatically detectable violations`, async ({
       page,
     }) => {
@@ -161,7 +156,8 @@ test.describe('charity verification', () => {
       await expect(
         page
           .getByRole('banner')
-          .locator(`a[href="${organisation.acnc.profileUrl}"]`),
+          .locator(`a[href="${organisation.acnc.profileUrl}"]`)
+          .first(),
       ).toBeVisible()
     })
   }
@@ -231,4 +227,169 @@ test('the homepage never scrolls sideways', async ({ page }) => {
   )
 
   expect(overflow).toBeLessThanOrEqual(0)
+})
+
+const archivedSlugs = ['rainbow-restoration', 'our-move', 'whats-my-impact']
+
+test.describe('navigation state', () => {
+  const cases = [
+    ['/projects/helping-homes', 'Helping Homes'],
+    ['/projects', 'Projects'],
+    ['/projects/our-move', 'Projects'],
+    ['/about', 'About'],
+    ['/archive', 'Archive'],
+  ] as const
+
+  for (const [route, label] of cases) {
+    test(`${route} marks ${label} as the current page`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'desktop')
+
+      await page.goto(route)
+      const current = page
+        .getByRole('navigation', { name: 'Primary' })
+        .locator('[aria-current="page"]')
+
+      await expect(current).toHaveCount(1)
+      await expect(current).toHaveText(label)
+    })
+  }
+})
+
+test('Helping Homes has its own service page', async ({ page }) => {
+  await page.goto('/projects/helping-homes')
+
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Ready for the next emergency',
+  )
+  const status = page.getByTestId('helping-homes-status')
+  await expect(status).toHaveAttribute('data-mode', 'standby')
+  await expect(status).toHaveAttribute('data-availability', 'unavailable')
+  await expect(status).toContainText('Last reviewed')
+  await expect(status).toContainText('call 000', { ignoreCase: true })
+  await expect(page.getByTestId('helping-homes-notice')).toContainText(
+    /replace 000/,
+  )
+  await expect(page.getByTestId('season-steps').locator('li')).toHaveCount(3)
+})
+
+for (const slug of archivedSlugs) {
+  test(`/projects/${slug} is an archived record without imagery`, async ({
+    page,
+  }) => {
+    await page.goto(`/projects/${slug}`)
+
+    await expect(page.getByTestId('archived-status')).toContainText('Archived')
+    await expect(page.getByTestId('archived-notice')).toBeVisible()
+    await expect(page.locator('main img')).toHaveCount(0)
+    await expect(
+      page.getByRole('navigation', { name: 'Breadcrumb' }),
+    ).toContainText('Projects')
+    await expect(page.getByRole('link', { name: /All projects/ })).toBeVisible()
+  })
+}
+
+test('/projects lists archived ideas as a record without imagery', async ({
+  page,
+}) => {
+  await page.goto('/projects')
+
+  await expect(
+    page.getByTestId('archived-projects').locator('li'),
+  ).toHaveCount(3)
+  await expect(page.locator('main img')).toHaveCount(0)
+  await expect(
+    page.getByRole('link', { name: /Explore the service/ }),
+  ).toHaveAttribute('href', '/projects/helping-homes')
+})
+
+test('/archive shows four articles and five press reports', async ({ page }) => {
+  await page.goto('/archive')
+
+  await expect(page.getByTestId('archive-articles').locator('li')).toHaveCount(4)
+  const press = page.getByTestId('archive-press').locator('li')
+  await expect(press).toHaveCount(5)
+  await expect(page.getByTestId('archive-press').locator('img')).toHaveCount(5)
+})
+
+test('/about shows the dated record and the registration record', async ({
+  page,
+}) => {
+  await page.goto('/about')
+
+  await expect(page.locator('#founder')).toBeVisible()
+  await expect(page.getByTestId('dated-record').locator('li')).toHaveCount(4)
+  const record = page.getByTestId('registration-record')
+  await expect(record).toContainText(organisation.abnDisplay)
+  await expect(record).toContainText(organisation.charity.size)
+  await expect(record).toContainText(
+    formatLongDate(organisation.charity.lastReportedOn),
+  )
+  await expect(record).toContainText(
+    formatLongDate(organisation.charity.nextReportDue),
+  )
+  await expect(record).toContainText('not tax-deductible', { ignoreCase: true })
+})
+
+test('the 404 page keeps the site chrome and the emergency line', async ({
+  page,
+}) => {
+  await page.goto('/this-page-does-not-exist')
+
+  await expect(
+    page
+      .getByRole('banner')
+      .locator(`a[href="${organisation.acnc.profileUrl}"]`)
+      .first(),
+  ).toBeVisible()
+  await expect(page.locator('footer')).toContainText(
+    `ABN ${organisation.abnDisplay}`,
+  )
+  await expect(page.getByTestId('emergency-line')).toContainText('000')
+})
+
+test('the open mobile menu carries the charity chip and the 000 line', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile')
+
+  await page.goto('/about')
+  await page.locator('[data-menu-toggle]').click()
+  const menu = page.getByRole('navigation', { name: 'Mobile' })
+
+  await expect(menu).toContainText('ACNC registered charity')
+  await expect(menu).toContainText('Call 000')
+  await expect(
+    menu.locator('[data-mobile-nav-link][aria-current="page"]'),
+  ).toHaveText('About')
+  for (const link of await menu.locator('[data-mobile-nav-link]').all()) {
+    const box = await link.boundingBox()
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(48)
+  }
+
+  const results = await new AxeBuilder({ page }).analyze()
+  expect(results.violations).toEqual([])
+})
+
+test.describe('narrow phones', () => {
+  test.use({ viewport: { width: 320, height: 640 } })
+
+  for (const route of [...publicRoutes, '/this-page-does-not-exist']) {
+    test(`${route} does not scroll sideways at 320px`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'mobile')
+
+      await page.goto(route)
+      await page.evaluate(() => document.fonts.ready)
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      )
+
+      expect(overflow).toBeLessThanOrEqual(0)
+    })
+  }
 })
