@@ -9,7 +9,7 @@ deployed quickly during an emergency.
 
 ## Requirements
 
-- [Bun 1.3.14](https://bun.sh/)
+- [Bun 1.4.2](https://bun.sh/)
 
 ## Local development
 
@@ -35,9 +35,12 @@ bun audit
 `test:e2e` builds the site and tests the production preview at desktop and
 mobile viewport sizes.
 
-The small patch in `patches/` lets an optional Astro lint dependency use the
-current, audited `brace-expansion` API. Remove it once that dependency updates
-its own version range.
+`overrides` in `package.json` pin a few transitive dependencies to versions
+that fix published advisories. Re-run `bun audit` after each upgrade and remove
+an override once its parent package no longer needs it.
+
+TypeScript stays on 6.x for now because `astro check` does not yet support
+TypeScript 7.
 
 ## Change the Helping Homes status
 
@@ -82,8 +85,8 @@ or the Australian Business Register.
 Vercel builds the site with:
 
 ```bash
-bunx bun@1.3.14 install --frozen-lockfile
-bunx bun@1.3.14 run build
+bunx bun@1.4.2 install --frozen-lockfile
+bunx bun@1.4.2 run build
 ```
 
 The explicit wrapper is needed because Vercel otherwise chooses the current
