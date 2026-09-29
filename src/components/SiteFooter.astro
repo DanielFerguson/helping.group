@@ -27,18 +27,18 @@ const explore = [
     <div class="flex flex-wrap items-start gap-12 sm:gap-14">
       <nav aria-label="Footer">
         <p class="text-xs font-semibold tracking-[0.08em] text-ink-fog uppercase">Explore</p>
-        <ul class="mt-4 space-y-3 text-[0.9375rem]">
+        <ul class="mt-4 space-y-1 text-[0.9375rem]">
           {explore.map((link) => (
-            <li><a class="hover:text-leaf" href={link.href}>{link.label}</a></li>
+            <li><a class="inline-flex min-h-10 items-center hover:text-leaf" href={link.href}>{link.label}</a></li>
           ))}
         </ul>
       </nav>
       <nav aria-label="Social media">
         <p class="text-xs font-semibold tracking-[0.08em] text-ink-fog uppercase">Elsewhere</p>
-        <ul class="mt-4 space-y-3 text-[0.9375rem]">
+        <ul class="mt-4 space-y-1 text-[0.9375rem]">
           {socialLinks.map((link) => (
             <li>
-              <a class="hover:text-leaf" href={link.url} target="_blank" rel="noopener noreferrer">
+              <a class="inline-flex min-h-10 items-center hover:text-leaf" href={link.url} target="_blank" rel="noopener noreferrer">
                 {link.name}
               </a>
             </li>
@@ -69,9 +69,9 @@ const explore = [
       <p class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ink-fog">
         <img src="/icons/hg-leaf.svg" alt="" width="32" height="44" class="h-5 w-auto" />
         <span>© {new Date().getFullYear()} Helping Group</span>
-        <span aria-hidden="true">·</span>
+        <span class="hidden sm:inline" aria-hidden="true">·</span>
         <span>ABN {organisation.abnDisplay}</span>
-        <span aria-hidden="true">·</span>
+        <span class="hidden sm:inline" aria-hidden="true">·</span>
         <span>Registered charity (ACNC)</span>
       </p>
       <p class="font-semibold">In an emergency, call 000.</p>

@@ -12,7 +12,7 @@ const { light = false, compact = false } = Astro.props
   {!compact && (
     <span
       class:list={[
-        'font-display text-[1.3125rem] leading-none font-bold tracking-[-0.03em]',
+        'font-display text-[1.3125rem] leading-none font-bold tracking-[-0.03em] whitespace-nowrap',
         light ? 'text-white' : 'text-ink',
       ]}
     >
