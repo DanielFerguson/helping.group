@@ -1,19 +1,9 @@
 ---
 import { organisation } from '../data/organisation'
+import { isNavActive, navLinks } from '../lib/nav'
 import Logo from './Logo.astro'
 
 const path = Astro.url.pathname
-const links = [
-  { label: 'Helping Homes', href: '/projects/helping-homes' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-  { label: 'Archive', href: '/archive' },
-]
-
-const isActive = (href: string) =>
-  href === '/projects'
-    ? path === '/projects'
-    : path === href || path.startsWith(`${href}/`)
 ---
 
 <header class="relative z-50 border-b border-line bg-paper">
@@ -39,13 +29,13 @@ const isActive = (href: string) =>
     </div>
 
     <nav class="hidden items-center gap-8 lg:flex" aria-label="Primary">
-      {links.map((link) => (
+      {navLinks.map((link) => (
         <a
           href={link.href}
-          aria-current={isActive(link.href) ? 'page' : undefined}
+          aria-current={isNavActive(path, link.href) ? 'page' : undefined}
           class:list={[
             'inline-flex min-h-11 items-center border-b-2 text-[0.9375rem] transition-colors',
-            isActive(link.href)
+            isNavActive(path, link.href)
               ? 'border-ink font-semibold text-ink'
               : 'border-transparent font-medium text-ink-soft hover:text-ink',
           ]}
@@ -84,29 +74,50 @@ const isActive = (href: string) =>
 
   <nav
     id="mobile-navigation"
-    class="absolute inset-x-0 top-full border-b border-line bg-paper py-4 lg:hidden"
+    class="absolute inset-x-0 top-full flex h-[calc(100dvh-5rem)] flex-col overflow-y-auto border-t border-line bg-paper lg:hidden"
     aria-label="Mobile"
     data-mobile-menu
     hidden
   >
-    <div class="shell flex flex-col">
-      {links.map((link) => (
-        <a
-          href={link.href}
-          aria-current={isActive(link.href) ? 'page' : undefined}
-          class:list={[
-            'flex min-h-12 items-center border-l-2 px-4 font-medium',
-            isActive(link.href)
-              ? 'border-ink text-ink'
-              : 'border-transparent text-ink-soft hover:text-ink',
-          ]}
-        >
-          {link.label}
-        </a>
-      ))}
-      <a class="button-ink mt-3" href={`mailto:${organisation.contactEmail}`}>
-        Contact Helping Group <span aria-hidden="true">→</span>
+    <div class="shell flex flex-1 flex-col pt-4 pb-8">
+      <ul>
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              data-mobile-nav-link
+              aria-current={isNavActive(path, link.href) ? 'page' : undefined}
+              class:list={[
+                'flex min-h-19 items-center border-b border-l-[3px] border-line px-4 font-display text-[2.125rem] leading-none font-bold tracking-[-0.03em]',
+                isNavActive(path, link.href)
+                  ? 'border-l-ink text-ink'
+                  : 'border-l-transparent text-ink-soft hover:text-ink',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="button-ink mt-7" href={`mailto:${organisation.contactEmail}`}>
+        Contact Helping Group <span class="text-leaf" aria-hidden="true">→</span>
       </a>
+      <a
+        class="mt-6 inline-flex min-h-9 items-center gap-1.5 self-start rounded-full border border-line py-1 pr-3 pl-2 text-[0.8125rem] font-semibold text-ink"
+        href={organisation.acnc.profileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="ACNC registered charity: view our Charity Register entry (opens in a new tab)"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="size-3.5 shrink-0">
+          <circle cx="12" cy="12" r="10" fill="#86C349"></circle>
+          <path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#0F1F16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        ACNC registered charity
+      </a>
+      <p class="mt-auto border-t-2 border-ink pt-5 text-sm font-medium text-ink">
+        <strong class="mr-2 font-display text-[0.9375rem] font-bold text-rust">000</strong>In immediate danger? Call 000 first.
+      </p>
     </div>
   </nav>
 </header>
@@ -117,10 +128,13 @@ const isActive = (href: string) =>
   const openIcon = document.querySelector<HTMLElement>('[data-menu-open-icon]')
   const closeIcon = document.querySelector<HTMLElement>('[data-menu-close-icon]')
 
+  const root = document.documentElement
+
   const closeMenu = (returnFocus = false) => {
     if (!toggle || !menu || !openIcon || !closeIcon) return
 
     menu.hidden = true
+    root.classList.remove('menu-open')
     openIcon.hidden = false
     closeIcon.hidden = true
     toggle.setAttribute('aria-expanded', 'false')
@@ -134,6 +148,7 @@ const isActive = (href: string) =>
 
     const opening = menu.hidden
     menu.hidden = !opening
+    root.classList.toggle('menu-open', !menu.hidden)
     openIcon.hidden = opening
     closeIcon.hidden = !opening
     toggle.setAttribute('aria-expanded', String(opening))
