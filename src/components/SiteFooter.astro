@@ -1,13 +1,7 @@
 ---
 import { socialLinks } from '../data/archive'
 import { organisation } from '../data/organisation'
-
-const explore = [
-  { label: 'Helping Homes', href: '/projects/helping-homes' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-  { label: 'Archive', href: '/archive' },
-]
+import { navLinks } from '../lib/nav'
 ---
 
 <footer class="bg-ink text-white">
@@ -28,7 +22,7 @@ const explore = [
       <nav aria-label="Footer">
         <p class="text-xs font-semibold tracking-[0.08em] text-ink-fog uppercase">Explore</p>
         <ul class="mt-4 space-y-1 text-[0.9375rem]">
-          {explore.map((link) => (
+          {navLinks.map((link) => (
             <li><a class="inline-flex min-h-10 items-center hover:text-leaf" href={link.href}>{link.label}</a></li>
           ))}
         </ul>

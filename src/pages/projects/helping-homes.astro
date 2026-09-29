@@ -1,0 +1,342 @@
+---
+import { getCollection } from 'astro:content'
+import NoticeBlock from '../../components/NoticeBlock.astro'
+import NumberedRows from '../../components/NumberedRows.astro'
+import PageHero from '../../components/PageHero.astro'
+import SiteFooter from '../../components/SiteFooter.astro'
+import SiteHeader from '../../components/SiteHeader.astro'
+import SourceList from '../../components/SourceList.astro'
+import SplitSection from '../../components/SplitSection.astro'
+import StatusLine from '../../components/StatusLine.astro'
+import { helpingHomesStatus } from '../../data/helping-homes-status'
+import { organisation } from '../../data/organisation'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { formatLongDate, formatLongDateTime } from '../../lib/format'
+import { getStatusPresentation } from '../../lib/status'
+
+const project = (await getCollection('projects')).find(
+  (entry) => entry.data.slug === 'helping-homes',
+)
+
+if (!project) {
+  throw new Error('The Helping Homes project entry is required.')
+}
+
+const { data } = project
+const presentation = getStatusPresentation(helpingHomesStatus)
+const activated = presentation.tone === 'activated'
+const officialLinks = presentation.officialLinks.map((link) => ({
+  label: link.label,
+  href: link.url,
+  external: true,
+}))
+const primaryGuidance = presentation.officialLinks[0]
+
+const standbyLead =
+  'Helping Homes is a seasonal service that connects people affected by emergencies with a spare room, paddock space or transport offered by their community. It stays on standby between emergencies, and it says so plainly.'
+
+const offers = [
+  {
+    title: 'Accommodation',
+    copy: 'A spare room, home or safe place to stay. Offered by people with space, and found by people who need somewhere safe.',
+  },
+  {
+    title: 'Paddock space',
+    copy: 'Temporary space for livestock, horses and other animals. Offered by people with land, and found by people moving animals out of harm’s way.',
+  },
+  {
+    title: 'Transport',
+    copy: 'Help moving people, animals or essential belongings. Offered by people with a vehicle, and found by people who can’t move things alone.',
+  },
+]
+
+const seasonSteps = [
+  {
+    label: 'Step 01 · Standby',
+    title: 'Ready, not alarmed.',
+    copy: 'The platform and public information are kept ready. The map stays visible, but offers not reconfirmed within two weeks are removed automatically, so it only shows current offers. Most of the year, that means very few or none.',
+    dot: 'bg-leaf ring-leaf-wash',
+    current: false,
+  },
+  {
+    label: 'Step 02 · Activated',
+    title: 'Published, with sources.',
+    copy: 'We publish the affected region, the time of the latest update and links to official emergency information.',
+    dot: 'bg-rust ring-rust-wash',
+    current: activated,
+  },
+  {
+    label: 'Step 03 · Back to standby',
+    title: 'Ready again.',
+    copy: 'When the emergency has passed, the service returns to standby until the next one.',
+    dot: 'bg-leaf ring-leaf-wash',
+    current: false,
+  },
+].map((step) => ({
+  ...step,
+  // While activated, only the current step is coloured; the others go quiet.
+  dot: activated && !step.current ? 'bg-transparent ring-ink-mist' : step.dot,
+  quiet: activated && !step.current,
+}))
+
+const recordLinks = [
+  ...data.sources.map((source) => ({
+    label: source.label,
+    href: source.url,
+    external: true,
+  })),
+  { label: 'How Helping Group began', href: '/about#founder' },
+]
+
+const projectData = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  description: data.summary,
+  url: new URL(`/projects/${data.slug}`, Astro.site).toString(),
+  image: new URL(data.hero, Astro.site).toString(),
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Helping Group',
+    url: 'https://helping.group',
+  },
+}
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  image={data.hero}
+  structuredData={projectData}
+>
+  <SiteHeader />
+  <main id="main-content">
+    <PageHero title={presentation.headline} asideBeforeActions={activated}>
+      <StatusLine slot="top" tone={presentation.tone}>
+        Helping Homes · {presentation.eyebrow}
+      </StatusLine>
+
+      {presentation.lead ?? standbyLead}
+
+      <Fragment slot="actions">
+        {presentation.officialLinksAboveAction && presentation.primaryAction === 'service' && (
+          <div>
+            <p class="eyebrow flex pb-3.5" aria-hidden="true">Official warnings</p>
+            <SourceList links={officialLinks} label="Official warnings" />
+          </div>
+        )}
+        {presentation.primaryAction === 'service' ? (
+          <a
+            class="button-primary sm:w-80"
+            href={helpingHomesStatus.serviceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="helping-homes-service-link"
+          >
+            <span>
+              Open Helping Homes
+              <span class="sr-only"> (opens in a new tab)</span>
+            </span>
+            <span class="arrow text-leaf" aria-hidden="true">↗</span>
+          </a>
+        ) : presentation.primaryAction === 'unavailable-notice' ? (
+          <NoticeBlock
+            size="page"
+            variant="activated"
+            bordered
+            level="h2"
+            headingId="helping-homes-unavailable-heading"
+            title="The Helping Homes application is temporarily unavailable."
+          >
+            <p>Use official emergency information or contact Helping Group.</p>
+            <div class="pt-2">
+              <SourceList links={officialLinks} label="Official emergency information" />
+            </div>
+            <a
+              slot="actions"
+              class="button-primary mt-6 w-full sm:w-80"
+              href={`mailto:${organisation.contactEmail}`}
+            >
+              Contact Helping Group <span class="arrow text-leaf" aria-hidden="true">→</span>
+            </a>
+          </NoticeBlock>
+        ) : (
+          <a class="button-primary sm:w-80" href={`mailto:${organisation.contactEmail}`}>
+            Contact Helping Group <span class="arrow text-leaf" aria-hidden="true">→</span>
+          </a>
+        )}
+      </Fragment>
+
+      <div
+        slot="aside"
+        class:list={[
+          'flex flex-col border-l-2 border-ink pl-5 lg:pl-10',
+          activated ? 'gap-5 lg:gap-7' : 'gap-2.5',
+        ]}
+        data-testid="helping-homes-status"
+        data-mode={helpingHomesStatus.mode}
+        data-availability={helpingHomesStatus.serviceAvailability}
+      >
+        {activated ? (
+          <dl class="flex flex-col gap-5 lg:gap-7">
+            <div class="flex flex-col gap-2 lg:gap-2.5">
+              <dt class="text-xs leading-4 font-semibold tracking-[0.08em] text-ink-soft uppercase">
+                Affected regions
+              </dt>
+              <dd class="font-display text-[1.75rem] leading-8 font-bold tracking-[-0.03em] text-ink lg:text-[2rem] lg:leading-9">
+                {presentation.regions.join(', ')}
+              </dd>
+            </div>
+            <div class="flex flex-col gap-2 lg:gap-2.5">
+              <dt class="text-xs leading-4 font-semibold tracking-[0.08em] text-ink-soft uppercase">
+                {presentation.updatedLabel}
+              </dt>
+              <dd class="text-base leading-6 text-ink lg:text-[1.0625rem] lg:leading-[1.6875rem]">
+                <time datetime={helpingHomesStatus.lastUpdated}>
+                  {formatLongDateTime(helpingHomesStatus.lastUpdated)}
+                </time>
+              </dd>
+            </div>
+          </dl>
+        ) : (
+          <>
+            <p class="text-[1.0625rem] leading-[1.6875rem] text-ink">{presentation.summary}</p>
+            <p class="text-sm leading-5 text-ink-soft">
+              {presentation.updatedLabel}{' '}
+              <time datetime={helpingHomesStatus.lastUpdated}>
+                {formatLongDate(helpingHomesStatus.lastUpdated)}
+              </time>
+            </p>
+          </>
+        )}
+        <p class:list={['text-sm leading-5 font-medium text-ink', activated ? 'lg:pt-3' : 'pt-2 lg:pt-3']}>
+          <strong class="mr-2 font-display text-base font-bold text-rust lg:mr-2.5">000</strong>In immediate danger? Call 000 first.
+        </p>
+      </div>
+    </PageHero>
+
+    <SplitSection
+      id="offers"
+      tone="tint"
+      eyebrow="What you can offer or find"
+      title="Three kinds of practical help."
+    >
+      <Fragment slot="intro">
+        People with space can offer it. People affected by an emergency can search an
+        Australia-wide map for it.
+      </Fragment>
+      <NumberedRows onTint items={offers} />
+    </SplitSection>
+
+    <section id="season" class="section-space-inner scroll-mt-8" aria-labelledby="season-heading">
+      <div class="shell">
+        <div class="grid gap-3.5 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_33.75rem] lg:items-end lg:gap-20">
+          <div>
+            <p class="eyebrow flex">How it works across a season</p>
+            <h2 id="season-heading" class="section-title mt-3.5 max-w-[38.75rem] text-wrap sm:mt-5">
+              Standby, activated, then back to standby.
+            </h2>
+          </div>
+          <p class="pt-1 text-base leading-[1.5625rem] text-ink-soft sm:text-[1.0625rem] sm:leading-7 lg:pt-0">
+            We don’t manufacture urgency between emergencies. The Helping Group board decides
+            when to activate: when Australia has a natural disaster, and when good Samaritans
+            are offering temporary accommodation to its victims at a scale that needs our
+            intervention.
+          </p>
+        </div>
+
+        <ol class="ledger mt-8 lg:mt-12 lg:flex" data-testid="season-steps">
+          {seasonSteps.map((step) => (
+            <li
+              class="border-b border-line py-6 lg:flex-1 lg:basis-0 lg:border-b-0 lg:border-l lg:px-8 lg:pt-7 lg:pb-2 lg:first:border-l-0 lg:first:pl-0"
+              aria-current={step.current ? 'step' : undefined}
+            >
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 lg:gap-x-2.5">
+                <span
+                  class:list={['size-2.5 shrink-0 rounded-full ring-2', step.dot]}
+                  aria-hidden="true"
+                ></span>
+                <p
+                  class:list={[
+                    'text-xs leading-4 font-semibold tracking-[0.08em] uppercase',
+                    step.current ? 'text-ink' : 'text-ink-soft',
+                  ]}
+                >
+                  {step.label}
+                </p>
+                {step.current && (
+                  <span class="rounded-[3px] bg-rust px-2 py-px text-[0.6875rem] leading-[0.875rem] font-bold tracking-[0.08em] text-white uppercase">
+                    You are here
+                  </span>
+                )}
+              </div>
+              <h3
+                class:list={[
+                  'mt-2.5 font-display text-[1.625rem] leading-[1.875rem] font-bold tracking-[-0.03em] lg:mt-3 lg:text-[1.75rem] lg:leading-8',
+                  step.quiet ? 'text-ink-soft' : 'text-ink',
+                ]}
+              >
+                {step.title}
+              </h3>
+              <p class="mt-2.5 max-w-[38rem] leading-[1.5625rem] text-ink-soft lg:mt-3">{step.copy}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <SplitSection
+      id="isnt"
+      tone="tint"
+      eyebrow="What it isn’t"
+      title="A neighbour, not a first responder."
+    >
+      <NoticeBlock
+        size="page"
+        variant={activated ? 'activated' : 'standard'}
+        testid="helping-homes-notice"
+        headingId="helping-homes-notice-heading"
+        title="Helping Homes doesn’t replace 000 or official warnings."
+      >
+        <p>
+          Anyone in immediate danger should call 000 and follow advice from the relevant
+          emergency authority. Helping Homes is for connecting practical offers after those
+          immediate safety decisions have been made.
+        </p>
+        {primaryGuidance && (
+          <a
+            slot="actions"
+            class="text-link -mt-1 -mb-3 sm:mt-3"
+            href={primaryGuidance.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>
+              {primaryGuidance.label} <span aria-hidden="true">↗</span>
+              <span class="sr-only">(opens in a new tab)</span>
+            </span>
+          </a>
+        )}
+      </NoticeBlock>
+    </SplitSection>
+
+    <SplitSection
+      id="record"
+      eyebrow="The record"
+      title="Built for one summer. Kept for the next."
+    >
+      <div class="space-y-5 text-base leading-[1.6875rem] text-ink-soft sm:text-[1.125rem] sm:leading-[1.6]">
+        <p>
+          Helping Homes began during the 2019–20 Australian bushfire season. The first question
+          was practical: could people with a spare room or property make it easier for someone
+          evacuating to find a safe place to stay?
+        </p>
+        <p>The platform now supports offers of accommodation, paddock space and transport.</p>
+      </div>
+      <div class="mt-8 sm:mt-9">
+        <SourceList links={recordLinks} label="Sources" />
+      </div>
+    </SplitSection>
+  </main>
+  <SiteFooter />
+</BaseLayout>

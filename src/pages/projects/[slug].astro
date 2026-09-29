@@ -1,12 +1,20 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content'
+import NoticeBlock from '../../components/NoticeBlock.astro'
+import NumberedRows from '../../components/NumberedRows.astro'
+import PageHero from '../../components/PageHero.astro'
 import SiteFooter from '../../components/SiteFooter.astro'
 import SiteHeader from '../../components/SiteHeader.astro'
-import StatusPanel from '../../components/StatusPanel.astro'
+import SourceList from '../../components/SourceList.astro'
+import SplitSection from '../../components/SplitSection.astro'
+import StatusLine from '../../components/StatusLine.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects')
+  const projects = await getCollection(
+    'projects',
+    (project) => project.data.status === 'archived',
+  )
 
   return projects.map((project) => ({
     params: { slug: project.data.slug },
@@ -21,6 +29,16 @@ type Props = {
 const { project } = Astro.props
 const { Content } = await render(project)
 const { data } = project
+const record = [
+  { title: 'The challenge', copy: data.challenge },
+  { title: 'The response', copy: data.response },
+  { title: 'Where it stands', copy: data.outcome },
+]
+const sources = data.sources.map((source) => ({
+  label: source.label,
+  href: source.url,
+  external: true,
+}))
 const projectData = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -44,98 +62,61 @@ const projectData = {
 >
   <SiteHeader />
   <main id="main-content">
-    <section class="border-b border-forest/10">
-      <div class="shell grid gap-12 py-16 lg:grid-cols-[1fr_0.85fr] lg:items-center lg:py-22">
-        <div>
-          <div class="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.04em]">
-            <span
-              class:list={[
-                'border-l-2 pl-2',
-                data.status === 'standby'
-                  ? 'border-leaf text-forest'
-                  : 'border-forest/25 text-ink-soft',
-              ]}
-            >
-              {data.status === 'standby' ? 'On standby' : 'Archived'}
-            </span>
-            <span class="text-ink-soft">{data.period}</span>
-          </div>
-          <h1 class="display-title display-title--page mt-5">{data.title}</h1>
-          <p class="body-large mt-6 max-w-2xl">{data.summary}</p>
-        </div>
-        <div class="overflow-hidden rounded-xl border border-forest/10 bg-white p-2">
-          <img
-            src={data.hero}
-            alt={data.heroAlt}
-            width="1200"
-            height="630"
-            class="w-full"
-          />
-        </div>
-      </div>
-    </section>
-
-    {data.slug === 'helping-homes' && (
-      <section class="section-space">
-        <div class="shell">
-          <StatusPanel compact showCaseStudyAction={false} />
-        </div>
-      </section>
-    )}
-
-    <section class:list={['section-space', data.slug !== 'helping-homes' && 'bg-paper-deep']}>
-      <div class="shell border-y border-forest/15">
-        {[
-          ['The challenge', data.challenge],
-          ['The response', data.response],
-          ['Where it stands', data.outcome],
-        ].map(([title, copy], index) => (
-          <article class="grid gap-3 border-b border-forest/10 py-6 last:border-b-0 md:grid-cols-[0.12fr_0.45fr_1.2fr] md:gap-8">
-            <p class="text-sm font-medium text-forest">0{index + 1}</p>
-            <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">{title}</h2>
-            <p class="leading-7 text-ink-soft">{copy}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section-space bg-paper-deep/60">
-      <div class="shell grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-        <div>
-          <p class="eyebrow">Case study</p>
-          <h2 class="section-title mt-5">What this project was trying to solve.</h2>
-        </div>
-        <article class="project-prose max-w-3xl">
-          <Content />
-        </article>
-      </div>
-    </section>
-
-    <section class="section-space">
-      <div class="shell grid gap-10 border-y border-forest/15 py-8 lg:grid-cols-[0.7fr_1.3fr]">
-        <div>
-          <p class="eyebrow">Sources</p>
-          <h2 class="mt-5 font-display text-3xl font-semibold tracking-[-0.03em]">
-            Follow the record.
-          </h2>
-        </div>
-        <ul class="divide-y divide-forest/10 border-y border-forest/10">
-          {data.sources.map((source) => (
+    <PageHero title={data.title}>
+      <Fragment slot="top">
+        <nav aria-label="Breadcrumb" class="-mt-3 sm:-mt-8">
+          <ol class="flex flex-wrap items-center gap-2.5 text-sm leading-5 text-ink-soft">
             <li>
-              <a
-                class="group flex min-h-16 items-center justify-between gap-5 py-4 font-semibold text-forest"
-                href={source.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {source.label}
-                <span class="arrow" aria-hidden="true">↗</span>
-              </a>
+              <a class="underline underline-offset-4" href="/projects">Projects</a>
             </li>
-          ))}
-        </ul>
+            <li aria-hidden="true">/</li>
+            <li class="font-semibold text-ink" aria-current="page">{data.title}</li>
+          </ol>
+        </nav>
+        <div
+          class="mt-8 flex flex-col gap-1 sm:mt-11 sm:flex-row sm:items-center sm:gap-x-6"
+          data-testid="archived-status"
+        >
+          <StatusLine tone="archived">Archived · Not operating</StatusLine>
+          <p class="pl-[1.125rem] text-sm leading-5 text-ink-soft sm:pl-0">{data.period}</p>
+        </div>
+      </Fragment>
+
+      {data.summary}
+    </PageHero>
+
+    <section class="bg-paper-deep pt-10 pb-12 sm:pt-18 sm:pb-20">
+      <div class="shell">
+        <NoticeBlock
+          size="page"
+          variant="muted"
+          split
+          level="h2"
+          testid="archived-notice"
+          headingId="archived-notice-heading"
+          title="This project is archived."
+        >
+          <p>It isn’t active. We keep it here as part of the record.</p>
+        </NoticeBlock>
       </div>
     </section>
+
+    <SplitSection id="record" eyebrow="The record" title="What we explored. Where it ended.">
+      <NumberedRows onTint items={record} />
+    </SplitSection>
+
+    <SplitSection id="case-study" tone="tint" eyebrow="Case study" title="The longer story.">
+      <article class="project-prose max-w-[42.5rem]">
+        <Content />
+      </article>
+    </SplitSection>
+
+    <SplitSection id="sources" eyebrow="Sources" title="Follow the record.">
+      <SourceList links={sources} label="Sources" />
+      <a class="text-link mt-2 sm:mt-7" href="/projects">
+        <span><span aria-hidden="true">←</span> All projects</span>
+      </a>
+    </SplitSection>
   </main>
   <SiteFooter />
 </BaseLayout>

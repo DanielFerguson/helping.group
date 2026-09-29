@@ -26,7 +26,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'bun run preview -- --host 127.0.0.1 --port 4321',
+    // --ignore-lock: Astro 7.3 backgrounds `astro preview` for AI agents, so Playwright thinks it exited.
+    command: 'bun run preview -- --host 127.0.0.1 --port 4321 --ignore-lock',
     url: 'http://127.0.0.1:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,

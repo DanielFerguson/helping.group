@@ -1,170 +1,45 @@
 ---
 import { helpingHomesStatus } from '../data/helping-homes-status'
-import { organisation } from '../data/organisation'
 import { formatLongDate } from '../lib/format'
 import { getStatusPresentation } from '../lib/status'
+import StatusLine from './StatusLine.astro'
 
-type Props = {
-  compact?: boolean
-  showCaseStudyAction?: boolean
-  variant?: 'panel' | 'inline'
-}
-
-const {
-  compact = false,
-  showCaseStudyAction = true,
-  variant = 'panel',
-} = Astro.props
 const presentation = getStatusPresentation(helpingHomesStatus)
 const reviewedOn = formatLongDate(helpingHomesStatus.lastUpdated)
 const activated = presentation.tone === 'activated'
 ---
 
-{variant === 'panel' && (
-  <section
-    class:list={[
-      'overflow-hidden rounded-lg border',
-      presentation.tone === 'activated'
-        ? 'border-rust/30 bg-rust/5'
-        : 'border-line bg-white',
-    ]}
-    aria-labelledby="helping-homes-status-heading"
-    data-testid="helping-homes-status"
-    data-mode={helpingHomesStatus.mode}
-    data-availability={helpingHomesStatus.serviceAvailability}
-  >
-    <div
-      class:list={[
-        'grid gap-8',
-        compact
-          ? 'p-6 sm:p-8'
-          : 'p-6 sm:p-8 lg:grid-cols-[1fr_0.48fr] lg:p-10',
-      ]}
+<section
+  class="flex flex-col gap-2.5"
+  aria-labelledby="helping-homes-status-heading"
+  data-testid="helping-homes-status"
+  data-mode={helpingHomesStatus.mode}
+  data-availability={helpingHomesStatus.serviceAvailability}
+>
+  <StatusLine tone={activated ? 'activated' : 'standby'} as="h2" id="helping-homes-status-heading">
+    Helping Homes · {presentation.eyebrow}
+  </StatusLine>
+  <p class="leading-6 text-ink-soft">{presentation.summary}</p>
+  <p class="text-sm text-ink-soft">
+    Last reviewed <time datetime={helpingHomesStatus.lastUpdated}>{reviewedOn}</time>
+  </p>
+  {presentation.showServiceAction && (
+    <a
+      class="text-link"
+      href={helpingHomesStatus.serviceUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-testid="helping-homes-service-link"
     >
-      <div>
-        <p class="inline-flex items-center gap-2 text-sm font-semibold text-forest">
-          <span
-            class:list={[
-              'size-2.5 rounded-full',
-              presentation.tone === 'activated'
-                ? 'bg-rust'
-                : 'bg-leaf',
-            ]}
-            aria-hidden="true"
-          ></span>
-          {presentation.eyebrow}
-        </p>
-        <h2
-          id="helping-homes-status-heading"
-          class:list={[
-            'mt-4 max-w-2xl font-display font-bold leading-tight tracking-[-0.03em] text-ink',
-            compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl',
-          ]}
-        >
-          {presentation.title}
-        </h2>
-        <p class="mt-4 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg">
-          {presentation.description}
-        </p>
-        {presentation.availabilityNote && (
-          <p class="mt-5 max-w-2xl rounded-lg border border-forest/12 bg-paper-deep/60 p-4 text-sm leading-6 text-ink-soft">
-            <strong class="text-ink">Service availability:</strong>{' '}
-            {presentation.availabilityNote}
-          </p>
-        )}
-        <p class="mt-5 text-sm text-ink-soft">
-          Status last reviewed <time datetime={helpingHomesStatus.lastUpdated}>{reviewedOn}</time>
-        </p>
-      </div>
-
-      <div class="flex flex-col justify-end gap-3">
-        {showCaseStudyAction && (
-          <a class="button-primary" href="/projects/helping-homes">
-            Explore Helping Homes
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-        )}
-        {presentation.showServiceAction && (
-          <a
-            class="inline-flex min-h-12 items-center justify-center rounded-lg border border-forest/20 px-5 font-semibold text-forest hover:border-forest"
-            href={helpingHomesStatus.serviceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="helping-homes-service-link"
-          >
-            Open the service
-          </a>
-        )}
-        {!presentation.showServiceAction && (
-          <a
-            class="inline-flex min-h-12 items-center justify-center rounded-lg border border-forest/20 px-5 font-semibold text-forest hover:border-forest"
-            href={`mailto:${organisation.contactEmail}`}
-          >
-            Contact Helping Group
-          </a>
-        )}
-        {helpingHomesStatus.officialGuidance.map((link) => (
-          <a
-            class="inline-flex min-h-11 items-center justify-center text-center text-sm font-medium text-ink-soft underline decoration-forest/20 underline-offset-4 hover:text-forest"
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
-    </div>
-    <div class="border-t border-forest/10 bg-paper-deep/60 px-6 py-4 text-sm text-ink-soft sm:px-8 lg:px-10">
-      In immediate danger? Call <strong class="text-ink">000</strong> and follow
-      official emergency advice.
-    </div>
-  </section>
-)}
-
-{variant === 'inline' && (
-  <section
-    class="flex flex-col gap-2.5"
-    aria-labelledby="helping-homes-status-heading"
-    data-testid="helping-homes-status"
-    data-mode={helpingHomesStatus.mode}
-    data-availability={helpingHomesStatus.serviceAvailability}
-  >
-    <h2
-      id="helping-homes-status-heading"
-      class="flex items-center gap-2 text-[0.8125rem] font-semibold tracking-[0.08em] text-ink uppercase"
-    >
-      <span
-        class:list={[
-          'size-2.5 shrink-0 rounded-full ring-2',
-          activated ? 'bg-rust ring-rust/25' : 'bg-leaf ring-leaf-wash',
-        ]}
-        aria-hidden="true"
-      ></span>
-      Helping Homes · {presentation.eyebrow}
-    </h2>
-    <p class="leading-6 text-ink-soft">{presentation.summary}</p>
-    <p class="text-sm text-ink-soft">
-      Last reviewed <time datetime={helpingHomesStatus.lastUpdated}>{reviewedOn}</time>
-    </p>
-    {presentation.showServiceAction && (
-      <a
-        class="text-link"
-        href={helpingHomesStatus.serviceUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="helping-homes-service-link"
-      >
-        Open Helping Homes <span aria-hidden="true">↗</span>
-      </a>
-    )}
-    {activated && helpingHomesStatus.officialGuidance.map((link) => (
-      <a class="text-link" href={link.url} target="_blank" rel="noopener noreferrer">
-        {link.label} <span aria-hidden="true">↗</span>
-      </a>
-    ))}
-    <p class="pt-1 text-sm font-medium text-ink">
-      <strong class="mr-2 font-display font-bold text-rust">000</strong>In immediate danger? Call 000 first.
-    </p>
-  </section>
-)}
+      Open Helping Homes <span aria-hidden="true">↗</span>
+    </a>
+  )}
+  {activated && helpingHomesStatus.officialGuidance.map((link) => (
+    <a class="text-link" href={link.url} target="_blank" rel="noopener noreferrer">
+      {link.label} <span aria-hidden="true">↗</span>
+    </a>
+  ))}
+  <p class="pt-1 text-sm font-medium text-ink">
+    <strong class="mr-2 font-display font-bold text-rust">000</strong>In immediate danger? Call 000 first.
+  </p>
+</section>

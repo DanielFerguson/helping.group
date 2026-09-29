@@ -1,0 +1,26 @@
+---
+type Props = {
+  tone: 'standby' | 'activated' | 'archived'
+  as?: 'p' | 'h2' | 'div'
+  id?: string
+}
+
+const { tone, as: Tag = 'p', id }: Props = Astro.props
+const dot = {
+  standby: 'bg-leaf ring-leaf-wash',
+  activated: 'bg-rust ring-rust-wash',
+  archived: 'bg-ink-soft ring-line',
+}[tone]
+const text = tone === 'archived' ? 'text-ink-soft' : 'text-ink'
+---
+
+<Tag
+  id={id}
+  class:list={[
+    'flex items-center gap-2 text-[0.8125rem] font-semibold tracking-[0.08em] uppercase',
+    text,
+  ]}
+>
+  <span class:list={['size-2.5 shrink-0 rounded-full ring-2', dot]} aria-hidden="true"></span>
+  <slot />
+</Tag>

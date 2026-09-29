@@ -1,6 +1,6 @@
 # Inner pages in the "Public notice" direction: design
 
-**Status:** Approved 29 Sep 2026. The next step is designing in Paper. Implementation follows in a separate plan.
+**Status:** Approved and designed in Paper on 29 Sep 2026 (page "Inner pages — B · Public notice"). The open questions are resolved below. Implementation follows in a separate plan.
 
 **Goal:** Design every page apart from the homepage in Direction B, "Public notice", before any of them are built. That covers each state visitors can reach, at desktop and mobile widths.
 
@@ -71,7 +71,7 @@ Build each of these once on the first page that needs it, then clone it everywhe
 1. **Header**, with Helping Homes active.
 2. **Status first.** Eyebrow `HELPING HOMES · ON STANDBY`. A headline along the lines of "Ready for the next emergency." The status summary comes from `getStatusPresentation`, followed by "Last reviewed" and the `000` line, all above the fold.
 3. **What you can offer or find.** Numbered rows for Accommodation, Paddock space and Transport, with more detail than the homepage gives.
-4. **How it works across a season.** A three-step record running Standby → Activated → Back to standby. It says what Helping Group publishes at each step: the affected region, the time of the latest update and links to official information. This is already stated in `helping-homes.md`.
+4. **How it works across a season.** A three-step record running Standby → Activated → Back to standby. It says what Helping Group publishes at each step: the affected region, the time of the latest update and links to official information. This is already stated in `helping-homes.md`. The section intro also says who decides: the Helping Group board activates the service when Australia has a natural disaster, and when good Samaritans are offering temporary accommodation to its victims at a scale that needs our intervention. Step 01 says the map stays visible on standby, but offers not reconfirmed within two weeks are removed automatically, so few or none show for most of the year.
 5. **What it isn't.** A standard notice block, for example "Helping Homes doesn't replace 000 or official warnings."
 6. **The record.** How it began in the Black Summer fires, with links to About and the sources.
 7. **Footer.**
@@ -104,7 +104,7 @@ This is the same page in the activated state:
 ### Archived project (`/projects/[slug]`)
 
 1. **Hero.** A `Projects / <Title>` breadcrumb, then a grey status line reading `ARCHIVED · NOT OPERATING` with the period. Then the title and the summary.
-2. **Muted notice block**, taken from the `outcome` field.
+2. **Muted notice block** with fixed text ("It isn't operating any more. We keep it here as part of the record."). It does not repeat `outcome`, because row 03 below carries the full text.
 3. **The record.** Numbered rows for 01 The challenge, 02 The response and 03 Where it stands.
 4. **Case study.** Markdown prose in a reading column of about 680px.
 5. **Sources**, followed by a link back to all projects.
@@ -119,7 +119,7 @@ This is the same page in the activated state:
 
 ### 404
 
-The page has the header and footer. Between them sit an "Error 404" eyebrow, the headline "This page isn't here.", a lead line, and two buttons (Home and Helping Homes). The `000` line appears below them.
+The page has the header and footer. Between them sit an "Error 404" eyebrow, the headline "This page isn't here.", a lead line, and two buttons (Return home and Browse projects, as in `404.astro` today). The `000` line appears below them.
 
 ### Mobile menu, open
 
@@ -145,13 +145,13 @@ A full-height ink or white panel below the header. It lists the nav items at a g
 
 ---
 
-## Open questions (for the user, not blocking)
+## Resolved questions
 
-1. How activation is decided, and who decides. Leave it out of the page until it's confirmed.
-2. Whether the Helping Homes app shows its map while on standby.
-3. The email mismatch between the ACNC register and the site. This is carried over from the homepage plan.
-
----
+1. **How activation is decided.** The Helping Group board decides, when Australia has a natural disaster and when good Samaritans are offering temporary accommodation for its victims at a level and scale that requires our intervention. Confirmed by the user, 29 Sep 2026.
+2. **The map on standby.** The Helping Homes app shows its map while on standby. Offers older than two weeks that haven't been reconfirmed are removed automatically, so for most of the year there are very few or no offers. Confirmed by the user, 29 Sep 2026.
+3. **The email mismatch.** Resolved in `0b91a94`: the site uses `contact@helpinggroup.com.au`. The Paper artboards now show the same address.
+4. **Dated record on About** (Summer 2019–20, 6 Aug 2020, 2020–21, Today). The user confirmed the dates.
+5. **Other choices.** The user approved the sample activation incident, the new 404 header and footer, and the Archive "On this page" index. The mobile menu stays white with the long ACNC chip in the panel.
 
 ## Implementation implications (for the later plan)
 
@@ -161,6 +161,7 @@ A full-height ink or white panel below the header. It lists the nav items at a g
 - Add the header and footer to `404.astro`.
 - Restyle the existing mobile menu dropdown (`data-mobile-menu` in `SiteHeader.astro`) to match the open-menu artboard.
 - This supersedes Task 12 of the homepage plan, which only added `<Governance />` to the old About page.
+- The Helping Homes page copy about activation and two-week offer expiry comes from the user's confirmation (see Resolved questions). Keep it in sync with how the app actually behaves.
 
 ## Out of scope
 

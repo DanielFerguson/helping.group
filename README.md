@@ -54,15 +54,23 @@ Edit `src/data/helping-homes-status.ts`.
   site will hide the outbound service action automatically.
 - Update `lastUpdated` whenever the status changes.
 
+The Helping Homes page (`src/pages/projects/helping-homes.astro`) and the
+homepage status read this file, so the page headline, affected regions, official
+links and the "You are here" step change with it. The standby copy, the
+offer descriptions and the season steps are written in that page; the title,
+summary and source come from `src/content/projects/helping-homes.md`.
+
 Run all quality checks, review the Vercel preview, then promote the deployment.
 Do not describe Helping Homes as an emergency service. People in immediate
 danger must be directed to call 000 and follow official emergency advice.
 
 ## Edit project content
 
-Project case studies live in `src/content/projects`. Their frontmatter is
-validated by `src/content.config.ts`. Historical articles and verified press
-links are curated in `src/data/archive.ts`.
+Archived project pages are generated from `src/content/projects` (Helping
+Homes has its own page and only uses its metadata from there). Their frontmatter
+is validated by `src/content.config.ts`; `hero` is used only for the social
+card image, since the pages themselves carry no imagery. Historical articles and
+verified press links are curated in `src/data/archive.ts`.
 
 Only publish claims that can be traced to a listed source. Archived projects
 must not link to their former domains as active services.
@@ -76,6 +84,9 @@ supporters. Every value must match the
 or the Australian Business Register.
 
 - When the board changes on the ACNC register, update `responsiblePeople`.
+- After each Annual Information Statement, update `charity.lastReportedOn` and
+  `charity.nextReportDue` (shown on the About page). A unit test fails 30 days
+  after `nextReportDue`, as a reminder.
 - The build fails if the ABN does not pass the ABR checksum.
 - The site never asks for donations. Keep the public notice accurate if that
   ever changes.
