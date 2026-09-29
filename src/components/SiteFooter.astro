@@ -1,67 +1,80 @@
 ---
 import { socialLinks } from '../data/archive'
-import Logo from './Logo.astro'
+import { organisation } from '../data/organisation'
+
+const explore = [
+  { label: 'Helping Homes', href: '/projects/helping-homes' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'About', href: '/about' },
+  { label: 'Archive', href: '/archive' },
+]
 ---
 
-<footer class="border-t border-forest/10 bg-paper-deep/60">
-  <div class="shell grid gap-12 py-16 md:grid-cols-[1.3fr_0.7fr] md:py-20">
+<footer class="bg-ink text-white">
+  <div class="shell grid gap-12 py-16 md:grid-cols-[minmax(0,1fr)_auto] md:py-20">
     <div>
-      <a
-        href="/"
-        class="inline-flex min-h-12 items-center"
-        aria-label="Helping Group home"
-      >
-        <Logo />
-      </a>
-      <p class="mt-6 max-w-xl text-lg leading-8 text-ink-soft">
-        Practical digital tools that help people connect during difficult
-        moments. Helping Homes remains ready to activate when communities need
-        it.
+      <p class="max-w-md font-display text-3xl leading-tight font-bold tracking-[-0.035em] sm:text-[2.5rem]">
+        Questions? Talk to a real person.
       </p>
       <a
-        class="mt-7 inline-flex min-h-11 items-center font-semibold text-forest underline decoration-forest/25 underline-offset-8 hover:decoration-forest"
-        href="mailto:contact@helping.group"
+        class="mt-5 inline-flex min-h-11 items-center text-lg font-semibold text-leaf underline underline-offset-[6px]"
+        href={`mailto:${organisation.contactEmail}`}
       >
-        contact@helping.group
+        {organisation.contactEmail}
       </a>
     </div>
 
-    <div class="grid grid-cols-2 gap-8 text-sm">
+    <div class="flex flex-wrap items-start gap-12 sm:gap-14">
       <nav aria-label="Footer">
-        <p class="font-semibold text-ink">Explore</p>
-        <ul class="mt-4 space-y-3 text-ink-soft">
-          <li><a class="hover:text-forest" href="/projects/helping-homes">Helping Homes</a></li>
-          <li><a class="hover:text-forest" href="/projects">Projects</a></li>
-          <li><a class="hover:text-forest" href="/about">About</a></li>
-          <li><a class="hover:text-forest" href="/archive">Archive</a></li>
+        <p class="text-xs font-semibold tracking-[0.08em] text-ink-fog uppercase">Explore</p>
+        <ul class="mt-4 space-y-3 text-[0.9375rem]">
+          {explore.map((link) => (
+            <li><a class="hover:text-leaf" href={link.href}>{link.label}</a></li>
+          ))}
         </ul>
       </nav>
       <nav aria-label="Social media">
-        <p class="font-semibold text-ink">Elsewhere</p>
-        <ul class="mt-4 space-y-3 text-ink-soft">
+        <p class="text-xs font-semibold tracking-[0.08em] text-ink-fog uppercase">Elsewhere</p>
+        <ul class="mt-4 space-y-3 text-[0.9375rem]">
           {socialLinks.map((link) => (
             <li>
-              <a
-                class="hover:text-forest"
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a class="hover:text-leaf" href={link.url} target="_blank" rel="noopener noreferrer">
                 {link.name}
               </a>
             </li>
           ))}
         </ul>
       </nav>
+      <a
+        class="shrink-0 rounded-full bg-white p-1"
+        href={organisation.acnc.profileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="/icons/acnc.png"
+          alt="ACNC Registered Charity tick: view our Charity Register entry (opens in a new tab)"
+          width="288"
+          height="288"
+          loading="lazy"
+          class="size-24"
+        />
+      </a>
     </div>
   </div>
 
-  <div class="border-t border-forest/10">
-    <div
-      class="shell flex flex-col gap-3 py-6 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between"
-    >
-      <p>© {new Date().getFullYear()} Helping Group. Australia.</p>
-      <p>In an emergency, call 000.</p>
+  <div class="shell border-t border-white/10 py-7 text-sm">
+    <p class="max-w-3xl leading-6 text-ink-mist">{organisation.acknowledgementOfCountry}</p>
+    <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <p class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ink-fog">
+        <img src="/icons/hg-leaf.svg" alt="" width="32" height="44" class="h-5 w-auto" />
+        <span>© {new Date().getFullYear()} Helping Group</span>
+        <span aria-hidden="true">·</span>
+        <span>ABN {organisation.abnDisplay}</span>
+        <span aria-hidden="true">·</span>
+        <span>Registered charity (ACNC)</span>
+      </p>
+      <p class="font-semibold">In an emergency, call 000.</p>
     </div>
   </div>
 </footer>
