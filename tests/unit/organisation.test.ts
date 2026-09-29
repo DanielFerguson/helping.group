@@ -31,4 +31,26 @@ describe('organisation facts', () => {
   test('acknowledges the Traditional Owners by name', () => {
     expect(organisation.acknowledgementOfCountry).toContain('Wadawurrung')
   })
+
+  test('records the charity register details with valid, ordered dates', () => {
+    const { charity } = organisation
+
+    expect(charity.size).toBe('Small')
+    expect(charity.incomeTaxExempt).toBe(true)
+    expect(charity.deductibleGiftRecipient).toBe(false)
+    for (const date of [charity.lastReportedOn, charity.nextReportDue]) {
+      expect(Number.isNaN(Date.parse(date))).toBe(false)
+    }
+    expect(Date.parse(charity.nextReportDue)).toBeGreaterThan(
+      Date.parse(charity.lastReportedOn),
+    )
+  })
+
+  test('the next report due date has not passed', () => {
+    // Deliberate yearly reminder: after each Annual Information Statement,
+    // update organisation.charity from the ACNC Charity Register.
+    expect(Date.parse(organisation.charity.nextReportDue)).toBeGreaterThan(
+      Date.now(),
+    )
+  })
 })

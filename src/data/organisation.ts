@@ -36,6 +36,13 @@ export const organisation = {
     profileUrl: `${acncCharityUrl}/profile`,
     peopleUrl: `${acncCharityUrl}/people`,
   },
+  charity: {
+    size: 'Small',
+    incomeTaxExempt: true,
+    deductibleGiftRecipient: false,
+    lastReportedOn: '2026-02-23',
+    nextReportDue: '2027-01-31',
+  },
   abnLookupUrl: `https://abr.business.gov.au/ABN/View?abn=${abn}`,
   acknowledgementOfCountry:
     'Helping Group acknowledges the Wadawurrung people, Traditional Owners of the lands on which we live and work, and pays respect to Elders past and present.',
