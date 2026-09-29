@@ -243,22 +243,50 @@
 
   .project-prose {
     color: var(--color-ink-soft);
-    font-size: 1.08rem;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.625rem;
+  }
+
+  @media (min-width: 40rem) {
+    .project-prose {
+      font-size: 1.0625rem;
+      line-height: 1.75rem;
+    }
+  }
+
+  .project-prose > :first-child {
+    margin-top: 0;
   }
 
   .project-prose h2 {
-    margin-top: 3.25rem;
+    margin-top: 2.5rem;
     color: var(--color-ink);
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+    font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 1.14;
+    letter-spacing: -0.03em;
+    line-height: 1.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .project-prose h2 {
+      font-size: 2rem;
+      line-height: 2.25rem;
+    }
   }
 
   .project-prose p {
-    margin-top: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .project-prose p {
+      margin-top: 1.25rem;
+    }
+
+    .project-prose h2 + p {
+      margin-top: 1.5rem;
+    }
   }
 }
 

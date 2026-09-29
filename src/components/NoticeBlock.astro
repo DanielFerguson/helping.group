@@ -4,6 +4,8 @@ type Props = {
   surface?: 'white' | 'tint'
   size?: 'default' | 'page'
   bordered?: boolean
+  /** Wide layouts only: title on the left, body on the right. */
+  split?: boolean
   title: string
   headingId: string
   label?: string
@@ -16,6 +18,7 @@ const {
   surface = 'white',
   size = 'default',
   bordered = false,
+  split = false,
   title,
   headingId,
   label = 'Public notice',
@@ -37,6 +40,8 @@ const page = size === 'page'
     rule,
     bordered && 'border border-line',
     page ? 'px-[1.375rem] py-6 sm:p-8' : 'p-7 sm:p-8',
+    split &&
+      'lg:grid lg:grid-cols-[minmax(0,28.75rem)_minmax(0,1fr)] lg:gap-x-[3.75rem] lg:gap-y-4 lg:px-12 lg:pt-9 lg:pb-11',
     surface === 'tint' ? 'bg-paper-deep' : 'bg-white',
   ]}
   aria-labelledby={headingId}
@@ -46,6 +51,7 @@ const page = size === 'page'
     class:list={[
       'font-bold tracking-[0.08em] uppercase',
       page ? 'text-xs sm:text-[0.8125rem]' : 'text-[0.8125rem]',
+      split && 'lg:col-start-1 lg:row-start-1',
       labelColour,
     ]}
   >
@@ -58,6 +64,7 @@ const page = size === 'page'
       page
         ? 'mt-2.5 text-2xl leading-7 sm:mt-4 sm:text-[1.875rem] sm:leading-[2.125rem]'
         : 'mt-4 text-[1.75rem] leading-tight',
+      split && 'lg:col-start-1 lg:row-start-2 lg:mt-0',
       variant === 'muted' ? 'text-ink-soft' : 'text-ink',
     ]}
   >
@@ -69,6 +76,7 @@ const page = size === 'page'
       page
         ? 'mt-2.5 text-[0.9375rem] leading-[1.4375rem] sm:mt-3.5 sm:text-base sm:leading-[1.5625rem]'
         : 'mt-3.5 leading-7',
+      split && 'lg:col-start-2 lg:row-start-2 lg:mt-0 lg:text-lg lg:leading-[1.8125rem]',
     ]}
   >
     <slot />

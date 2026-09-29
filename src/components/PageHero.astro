@@ -10,10 +10,12 @@ const hasTop = Astro.slots.has('top')
 const hasLead = Astro.slots.has('default')
 const hasActions = Astro.slots.has('actions')
 const hasAside = Astro.slots.has('aside')
+// A hero with only a lead sits tighter under its title than one with actions or an aside.
+const lean = !hasActions && !hasAside
 ---
 
 <section aria-labelledby="page-title">
-  <div class="shell pt-10 pb-11 sm:pt-20 sm:pb-24">
+  <div class:list={['shell pt-10 sm:pt-20', lean ? 'pb-12 sm:pb-24' : 'pb-11 sm:pb-22']}>
     <slot name="top" />
     <h1
       id="page-title"
@@ -22,7 +24,13 @@ const hasAside = Astro.slots.has('aside')
       {title}
     </h1>
     {(hasLead || hasActions || hasAside) && (
-      <div class:list={['mt-5 grid gap-8 sm:mt-14 lg:gap-20', hasAside && 'lg:grid-cols-2']}>
+      <div
+        class:list={[
+          'mt-5 grid gap-8 lg:gap-20',
+          lean ? 'sm:mt-10' : 'sm:mt-14',
+          hasAside && 'lg:grid-cols-2',
+        ]}
+      >
         {(hasLead || hasActions) && (
           <div
             class:list={[
@@ -31,7 +39,7 @@ const hasAside = Astro.slots.has('aside')
             ]}
           >
             {hasLead && (
-              <div class="body-large max-w-[38rem]">
+              <div class="body-large max-w-[40rem]">
                 <slot />
               </div>
             )}
