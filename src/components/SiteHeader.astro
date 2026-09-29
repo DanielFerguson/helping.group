@@ -1,4 +1,5 @@
 ---
+import { organisation } from '../data/organisation'
 import Logo from './Logo.astro'
 
 const path = Astro.url.pathname
@@ -15,65 +16,66 @@ const isActive = (href: string) =>
     : path === href || path.startsWith(`${href}/`)
 ---
 
-<header class="relative z-50 border-b border-forest/10 bg-paper/95">
-  <div class="shell flex min-h-18 items-center justify-between gap-6">
-    <a
-      href="/"
-      class="inline-flex min-h-12 items-center rounded-sm"
-      aria-label="Helping Group home"
-    >
-      <Logo />
-    </a>
+<header class="relative z-50 border-b border-line bg-paper">
+  <div class="shell flex min-h-20 items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <a href="/" class="inline-flex min-h-12 items-center" aria-label="Helping Group home">
+        <Logo />
+      </a>
+      <a
+        class="hidden min-h-9 items-center gap-1.5 rounded-full border border-line py-1 pr-3 pl-2 text-[0.8125rem] font-semibold text-ink hover:border-ink min-[360px]:inline-flex"
+        href={organisation.acnc.profileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="ACNC registered charity: view our Charity Register entry (opens in a new tab)"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="size-3.5 shrink-0">
+          <circle cx="12" cy="12" r="10" fill="#86C349"></circle>
+          <path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#0F1F16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="lg:hidden">ACNC</span>
+        <span class="hidden lg:inline">ACNC registered charity</span>
+      </a>
+    </div>
 
-    <nav class="hidden items-center gap-5 md:flex" aria-label="Primary">
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Primary">
       {links.map((link) => (
         <a
           href={link.href}
           aria-current={isActive(link.href) ? 'page' : undefined}
           class:list={[
-            'inline-flex min-h-11 items-center border-b-2 px-1 text-sm font-medium transition-colors',
+            'inline-flex min-h-11 items-center border-b-2 text-[0.9375rem] transition-colors',
             isActive(link.href)
-              ? 'border-forest text-forest'
-              : 'border-transparent text-ink-soft hover:text-forest',
+              ? 'border-ink font-semibold text-ink'
+              : 'border-transparent font-medium text-ink-soft hover:text-ink',
           ]}
         >
           {link.label}
         </a>
       ))}
-      <a class="button-secondary ml-1" href="mailto:contact@helping.group">
+      <a
+        class="inline-flex min-h-11 items-center rounded-md bg-ink px-4 text-[0.9375rem] font-semibold text-white hover:bg-forest-deep"
+        href={`mailto:${organisation.contactEmail}`}
+      >
         Contact
       </a>
     </nav>
 
     <button
       type="button"
-      class="inline-flex size-12 items-center justify-center rounded-lg border border-forest/20 bg-white text-forest md:hidden"
+      class="inline-flex size-11 shrink-0 items-center justify-center rounded-md bg-ink text-white lg:hidden"
       aria-expanded="false"
       aria-controls="mobile-navigation"
       aria-label="Open menu"
       data-menu-toggle
     >
       <span data-menu-open-icon>
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          class="size-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M4 8h16M4 16h16"></path>
         </svg>
       </span>
       <span data-menu-close-icon hidden>
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          class="size-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="m6 6 12 12M18 6 6 18"></path>
         </svg>
       </span>
@@ -82,7 +84,7 @@ const isActive = (href: string) =>
 
   <nav
     id="mobile-navigation"
-    class="absolute inset-x-0 top-full border-y border-forest/10 bg-paper px-3 py-4 md:hidden"
+    class="absolute inset-x-0 top-full border-b border-line bg-paper py-4 lg:hidden"
     aria-label="Mobile"
     data-mobile-menu
     hidden
@@ -95,18 +97,15 @@ const isActive = (href: string) =>
           class:list={[
             'flex min-h-12 items-center border-l-2 px-4 font-medium',
             isActive(link.href)
-              ? 'border-forest text-forest'
-              : 'border-transparent text-ink hover:text-forest',
+              ? 'border-ink text-ink'
+              : 'border-transparent text-ink-soft hover:text-ink',
           ]}
         >
           {link.label}
         </a>
       ))}
-      <a
-        class="mt-3 flex min-h-12 items-center justify-center rounded-lg border border-forest/20 px-4 font-semibold text-forest"
-        href="mailto:contact@helping.group"
-      >
-        Contact Helping Group
+      <a class="button-ink mt-3" href={`mailto:${organisation.contactEmail}`}>
+        Contact Helping Group <span aria-hidden="true">→</span>
       </a>
     </div>
   </nav>
@@ -148,6 +147,6 @@ const isActive = (href: string) =>
   })
 
   window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768 && menu && !menu.hidden) closeMenu()
+    if (window.innerWidth >= 1024 && menu && !menu.hidden) closeMenu()
   })
 </script>
