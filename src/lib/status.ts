@@ -8,6 +8,10 @@ export type StatusPresentation = {
   availabilityNote: string | null
   showServiceAction: boolean
   tone: 'standby' | 'activated'
+  headline: string
+  regions: string[]
+  updatedLabel: 'Last reviewed' | 'Last updated'
+  officialLinks: { label: string; url: string }[]
 }
 
 export function getStatusPresentation(
@@ -30,6 +34,16 @@ export function getStatusPresentation(
         : 'The Helping Homes application is temporarily unavailable. Use official emergency information or contact Helping Group.',
       showServiceAction: isAvailable,
       tone: 'activated',
+      headline: `Responding to ${status.incident.name}.`,
+      regions: status.incident.regions,
+      updatedLabel: 'Last updated',
+      officialLinks: [
+        {
+          label: 'Official guidance for this incident',
+          url: status.incident.guidanceUrl,
+        },
+        ...status.officialGuidance,
+      ],
     }
   }
 
@@ -46,5 +60,9 @@ export function getStatusPresentation(
       : 'The Helping Homes application is temporarily unavailable while the service remains on standby.',
     showServiceAction: isAvailable,
     tone: 'standby',
+    headline: 'Ready for the next emergency.',
+    regions: [],
+    updatedLabel: 'Last reviewed',
+    officialLinks: status.officialGuidance,
   }
 }
