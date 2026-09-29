@@ -173,8 +173,8 @@ test('the verification band links to both public registers', async ({
   await page.goto('/')
   const band = page.getByTestId('verification-band')
 
-  await expect(band).toContainText(organisation.abnDisplay)
   await expect(band).toContainText('6 August 2020')
+  await expect(band).not.toContainText(organisation.abnDisplay)
   await expect(
     band.locator(`a[href="${organisation.abnLookupUrl}"]`),
   ).toBeVisible()
