@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f8f7f3;
-  --color-paper-deep: #efeee9;
-  --color-ink: #19221c;
-  --color-ink-soft: #59635c;
-  --color-forest: #24543a;
+  --color-paper: #ffffff;
+  --color-paper-deep: #f1f4ef;
+  --color-line: #dde3da;
+  --color-line-strong: #cdd6ca;
+  --color-ink: #0f1f16;
+  --color-ink-soft: #4a5850;
+  --color-ink-mist: #aab7ae;
+  --color-ink-fog: #8fa095;
+  --color-forest: #1e4d33;
   --color-forest-deep: #173725;
-  --color-leaf: #4c7055;
-  --color-leaf-bright: #93bd8b;
-  --color-mint: #e5eee5;
-  --color-sky: #d8e8eb;
+  --color-leaf: #86c349;
+  --color-leaf-wash: #d8ebc2;
+  --color-mint: #5fbe7b;
   --color-rust: #b8563d;
-  --color-sun: #efbc63;
-  --font-sans: Inter, "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
-  --font-display: Inter, "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
-  --shadow-soft: 0 16px 48px rgb(23 63 42 / 0.07);
-  --shadow-card: 0 6px 20px rgb(23 35 27 / 0.05);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), system-ui, sans-serif;
 }
 
 @layer base {
@@ -36,7 +36,7 @@
 
   ::selection {
     background: var(--color-leaf);
-    color: white;
+    color: var(--color-ink);
   }
 
   a,
@@ -52,62 +52,73 @@
 
 @layer components {
   .shell {
-    width: min(100% - 2rem, 74rem);
+    width: min(100% - 2.5rem, 80rem);
     margin-inline: auto;
   }
 
   .section-space {
-    padding-block: clamp(4rem, 7vw, 6.5rem);
+    padding-block: clamp(4.5rem, 8vw, 7rem);
   }
 
   .eyebrow {
     display: inline-flex;
     align-items: center;
     color: var(--color-forest);
-    font-size: 0.85rem;
-    font-weight: 650;
-    letter-spacing: 0.035em;
-    line-height: 1.4;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+    text-transform: uppercase;
   }
 
   .display-title {
-    max-width: 15ch;
+    max-width: 14ch;
     font-family: var(--font-display);
-    font-size: clamp(2.4rem, 5vw, 4.2rem);
-    font-weight: 500;
-    letter-spacing: -0.04em;
-    line-height: 1.06;
+    font-size: clamp(3.25rem, 8.4vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .display-title--page {
+    max-width: 18ch;
+    font-size: clamp(2.75rem, 6vw, 5rem);
+    line-height: 1;
   }
 
   .section-title {
-    max-width: 22ch;
+    max-width: 20ch;
     font-family: var(--font-display);
-    font-size: clamp(1.85rem, 3.6vw, 3rem);
-    font-weight: 550;
-    letter-spacing: -0.03em;
-    line-height: 1.12;
+    font-size: clamp(2.125rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    text-wrap: balance;
   }
 
   .body-large {
     color: var(--color-ink-soft);
-    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
-    line-height: 1.7;
+    font-size: clamp(1.0625rem, 1.5vw, 1.125rem);
+    line-height: 1.62;
   }
 
   .button-primary,
   .button-secondary,
-  .button-light {
+  .button-light,
+  .button-ink,
+  .button-outline-ink {
     display: inline-flex;
-    min-height: 3rem;
+    min-height: 3.25rem;
     align-items: center;
-    justify-content: center;
-    gap: 0.7rem;
+    justify-content: space-between;
+    gap: 1rem;
     border: 1px solid transparent;
-    border-radius: 0.65rem;
-    padding: 0.75rem 1.1rem;
-    font-size: 0.95rem;
-    font-weight: 650;
-    line-height: 1.2;
+    border-radius: 0.375rem;
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
     text-decoration: none;
     transition:
       background-color 160ms ease,
@@ -125,22 +136,67 @@
   }
 
   .button-secondary {
-    border-color: rgb(23 63 42 / 0.24);
-    color: var(--color-forest);
+    border-color: var(--color-line);
+    background: white;
+    color: var(--color-ink);
   }
 
   .button-secondary:hover {
-    border-color: var(--color-forest);
-    background: rgb(255 255 255 / 0.55);
+    border-color: var(--color-ink);
   }
 
   .button-light {
     background: white;
-    color: var(--color-forest);
+    color: var(--color-ink);
   }
 
   .button-light:hover {
-    background: var(--color-mint);
+    background: var(--color-paper-deep);
+  }
+
+  .button-ink {
+    background: var(--color-ink);
+    color: white;
+  }
+
+  .button-ink:hover {
+    background: var(--color-forest-deep);
+  }
+
+  .button-outline-ink {
+    border-color: rgb(15 31 22 / 0.4);
+    color: var(--color-ink);
+  }
+
+  .button-outline-ink:hover {
+    border-color: var(--color-ink);
+    background: rgb(255 255 255 / 0.25);
+  }
+
+  .text-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-forest);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgb(30 77 51 / 0.3);
+    text-underline-offset: 5px;
+  }
+
+  .text-link:hover {
+    text-decoration-color: var(--color-forest);
+  }
+
+  .logo-mono {
+    filter: grayscale(1) brightness(0.3);
+    transition: filter 160ms ease;
+  }
+
+  a:hover .logo-mono,
+  a:focus-visible .logo-mono {
+    filter: none;
   }
 
   .arrow {
@@ -152,9 +208,9 @@
   }
 
   .card {
-    border: 1px solid rgb(23 63 42 / 0.12);
-    border-radius: 1rem;
-    background: rgb(255 255 255 / 0.72);
+    border: 1px solid var(--color-line);
+    border-radius: 0.5rem;
+    background: white;
   }
 
   .project-prose {
@@ -168,21 +224,14 @@
     color: var(--color-ink);
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 3.5vw, 2.4rem);
-    font-weight: 620;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.035em;
     line-height: 1.14;
   }
 
   .project-prose p {
     margin-top: 1.2rem;
   }
-}
-
-.civic-grid {
-  background-image:
-    linear-gradient(rgb(23 63 42 / 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(23 63 42 / 0.06) 1px, transparent 1px);
-  background-size: 2rem 2rem;
 }
 
 .skip-link {
@@ -204,12 +253,6 @@
 
 [hidden] {
   display: none !important;
-}
-
-@media (max-width: 639px) {
-  .shell {
-    width: min(100% - 1.25rem, 74rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     <section class="border-b border-forest/10">
       <div class="shell py-18 sm:py-24 lg:py-28">
         <p class="eyebrow">About Helping Group</p>
-        <h1 class="display-title mt-5">
+        <h1 class="display-title display-title--page mt-5">
           A small idea built for a very real need.
         </h1>
         <p class="body-large mt-6 max-w-3xl">
@@ -72,7 +72,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
             ],
           ].map(([title, copy], index) => (
             <article class="grid gap-3 border-b border-forest/10 py-6 last:border-b-0 md:grid-cols-[0.12fr_0.55fr_1fr] md:gap-8">
-              <p class="text-sm font-medium text-leaf">0{index + 1}</p>
+              <p class="text-sm font-medium text-forest">0{index + 1}</p>
               <h3 class="text-xl font-semibold tracking-[-0.02em] text-ink">{title}</h3>
               <p class="leading-7 text-ink-soft">{copy}</p>
             </article>

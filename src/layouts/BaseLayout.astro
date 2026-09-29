@@ -1,4 +1,5 @@
 ---
+import { Font } from 'astro:assets'
 import '../styles/global.css'
 import { socialLinks } from '../data/archive'
 
@@ -52,8 +53,10 @@ const jsonLd: Record<string, unknown>[] = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <Font cssVariable="--font-inter" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-inter-tight" preload={[{ weight: 700 }]} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#173f2a" />
+    <meta name="theme-color" content="#0f1f16" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noIndex && <meta name="robots" content="noindex, follow" />}
