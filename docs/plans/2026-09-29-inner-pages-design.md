@@ -32,10 +32,10 @@
 - Lay the pages out in site order, left to right, with each mobile artboard directly beside its desktop artboard.
 - Anything a page claims that isn't already in the repo goes in a note beside the artboard, never in the design itself, so the artboard always shows publishable copy.
 
-### Artboards (15)
+### Artboards (15, plus one hero-only variant)
 
 1. Helping Homes, standby: desktop and mobile
-2. Helping Homes, activated: desktop and mobile
+2. Helping Homes, activated: desktop and mobile, plus a desktop hero-only artboard showing the "app unavailable" fallback
 3. About: desktop and mobile
 4. Projects: desktop and mobile
 5. Archived project: desktop and mobile. Our Move is the example.
