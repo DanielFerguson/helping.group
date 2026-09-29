@@ -1,34 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Helping Group
 
-## Getting Started
+The public website for Helping Group, the Australian not-for-profit behind
+[Helping Homes](https://helping.group/projects/helping-homes).
 
-First, run the development server:
+The site is built with Astro and is fully static. Helping Homes' operational
+state is kept in the repository so the public message can be changed and
+deployed quickly during an emergency.
+
+## Requirements
+
+- [Bun 1.3.14](https://bun.sh/)
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
+bun install
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Astro serves the site at `http://localhost:4321`.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Quality checks
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+bun run check
+bun run lint
+bun run test:unit
+bun run test:e2e
+bun run build
+bun outdated
+bun audit
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`test:e2e` builds the site and tests the production preview at desktop and
+mobile viewport sizes.
 
-## Learn More
+The small patch in `patches/` lets an optional Astro lint dependency use the
+current, audited `brace-expansion` API. Remove it once that dependency updates
+its own version range.
 
-To learn more about Next.js, take a look at the following resources:
+## Change the Helping Homes status
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Edit `src/data/helping-homes-status.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `mode: "standby"` is the normal state between emergency activations.
+- `mode: "activated"` requires an incident name, affected regions and an
+  official guidance URL.
+- `serviceAvailability` is separate from the operational mode. Set it to
+  `"unavailable"` if the Helping Homes application is not healthy; the group
+  site will hide the outbound service action automatically.
+- Update `lastUpdated` whenever the status changes.
 
-## Deploy on Vercel
+Run all quality checks, review the Vercel preview, then promote the deployment.
+Do not describe Helping Homes as an emergency service. People in immediate
+danger must be directed to call 000 and follow official emergency advice.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Edit project content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Project case studies live in `src/content/projects`. Their frontmatter is
+validated by `src/content.config.ts`. Historical articles and verified press
+links are curated in `src/data/archive.ts`.
+
+Only publish claims that can be traced to a listed source. Archived projects
+must not link to their former domains as active services.
+
+## Deployment
+
+Vercel builds the site with:
+
+```bash
+bunx bun@1.3.14 install --frozen-lockfile
+bunx bun@1.3.14 run build
+```
+
+The explicit wrapper is needed because Vercel otherwise chooses the current
+platform-managed Bun 1.x patch. The output directory is `dist`.

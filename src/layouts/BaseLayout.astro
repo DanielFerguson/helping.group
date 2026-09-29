@@ -1,0 +1,90 @@
+---
+import '../styles/global.css'
+import { socialLinks } from '../data/archive'
+
+type Props = {
+  title: string
+  description: string
+  image?: string
+  noIndex?: boolean
+  structuredData?: Record<string, unknown> | Record<string, unknown>[]
+}
+
+const {
+  title,
+  description,
+  image = '/social-card.png',
+  noIndex = false,
+  structuredData,
+} = Astro.props
+
+const pageTitle =
+  title === 'Helping Group' ? title : `${title} | Helping Group`
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const socialImage = new URL(image, Astro.site)
+const organisationData = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Helping Group',
+  url: 'https://helping.group',
+  logo: 'https://helping.group/icons/hg-colour.png',
+  email: 'contact@helping.group',
+  founder: {
+    '@type': 'Person',
+    name: 'Daniel Ferguson',
+  },
+  sameAs: socialLinks.map((link) => link.url),
+}
+
+const additionalStructuredData = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : []
+const jsonLd: Record<string, unknown>[] = [
+  organisationData,
+  ...additionalStructuredData,
+]
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#173f2a" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Helping Group" />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta
+      property="og:image:alt"
+      content="Helping Group — practical digital tools for people facing emergencies"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(jsonLd)}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <slot />
+  </body>
+</html>

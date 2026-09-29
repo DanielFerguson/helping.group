@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content'
+import ProjectCard from '../../components/ProjectCard.astro'
+import SiteFooter from '../../components/SiteFooter.astro'
+import SiteHeader from '../../components/SiteHeader.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+)
+const currentProject = projects.find(
+  (project) => project.data.status === 'standby',
+)
+const archivedProjects = projects.filter(
+  (project) => project.data.status === 'archived',
+)
+
+if (!currentProject) {
+  throw new Error('A current Helping Group project is required.')
+}
+---
+
+<BaseLayout
+  title="Projects"
+  description="Helping Homes is Helping Group’s continuing seasonal project. Explore how it works and the ideas preserved in the project archive."
+>
+  <SiteHeader />
+  <main id="main-content">
+    <section class="border-b border-forest/10">
+      <div class="shell py-18 sm:py-24 lg:py-28">
+        <p class="eyebrow">Projects</p>
+        <h1 class="display-title mt-5">One continuing service. Three archived ideas.</h1>
+        <p class="body-large mt-6 max-w-3xl">
+          Helping Group’s projects started with practical questions. This
+          archive distinguishes the service we still maintain from ideas that
+          are no longer active.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-space">
+      <div class="shell">
+        <p class="eyebrow">Continuing work</p>
+        <div class="mt-5">
+          <ProjectCard project={currentProject} featured headingLevel="h2" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space bg-paper-deep/60">
+      <div class="shell">
+        <p class="eyebrow">Archived projects</p>
+        <h2 class="section-title mt-5">Preserved without pretending they are still live.</h2>
+        <div class="mt-10 grid gap-5 lg:grid-cols-3">
+          {archivedProjects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

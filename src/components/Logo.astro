@@ -1,0 +1,28 @@
+---
+type Props = {
+  light?: boolean
+  compact?: boolean
+}
+
+const { light = false, compact = false } = Astro.props
+---
+
+<span class="inline-flex items-center gap-3">
+  <img
+    src={light ? '/icons/hg-white.png' : '/icons/hg-colour.png'}
+    alt=""
+    width="79"
+    height="105"
+    class="h-11 w-auto"
+  />
+  {!compact && (
+    <span
+      class:list={[
+        'text-lg font-extrabold tracking-[-0.025em]',
+        light ? 'text-white' : 'text-forest',
+      ]}
+    >
+      Helping Group
+    </span>
+  )}
+</span>

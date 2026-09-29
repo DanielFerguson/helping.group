@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://helping.group/sitemap-index.xml

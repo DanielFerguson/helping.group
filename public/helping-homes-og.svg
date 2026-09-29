@@ -1,0 +1,28 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hh-bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1626"/>
+      <stop offset="0.55" stop-color="#1B365D"/>
+      <stop offset="1" stop-color="#102138"/>
+    </linearGradient>
+    <linearGradient id="hh-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8BC442"/>
+      <stop offset="1" stop-color="#58BD84"/>
+    </linearGradient>
+    <pattern id="hh-grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#8FBDD9" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" rx="24" fill="url(#hh-bg)"/>
+  <rect width="1200" height="630" rx="24" fill="url(#hh-grid)"/>
+  <circle cx="1050" cy="110" r="190" fill="#66A6CA" fill-opacity=".08"/>
+  <g transform="translate(104 108) scale(.33)">
+    <path d="M298.2 72.6C310.5 61.2 329.5 61.2 341.7 72.6L432 156.3V144C432 126.3 446.3 112 464 112H496C513.7 112 528 126.3 528 144V245.5L565.8 280.6C575.4 289.6 578.6 303.5 573.8 315.7C569 327.9 557.2 336 544 336H528V512C528 547.3 499.3 576 464 576H176C140.7 576 112 547.3 112 512V336H96C82.8 336 71 327.9 66.2 315.7C61.4 303.5 64.6 289.5 74.2 280.6L298.2 72.6ZM304 384C277.5 384 256 405.5 256 432V528H384V432C384 405.5 362.5 384 336 384H304Z" fill="url(#hh-mark)"/>
+  </g>
+  <text x="345" y="245" font-family="Avenir Next, Segoe UI, sans-serif" font-size="82" font-weight="700" fill="#fff" letter-spacing="-3">Helping Homes</text>
+  <text x="350" y="318" font-family="Iowan Old Style, Georgia, serif" font-size="45" fill="#8FBDD9">Safer, together.</text>
+  <line x1="350" y1="362" x2="1040" y2="362" stroke="#8FBDD9" stroke-opacity=".3"/>
+  <text x="350" y="425" font-family="Avenir Next, Segoe UI, sans-serif" font-size="26" fill="#D9E8F1">Emergency accommodation · paddock space · transport</text>
+  <rect x="350" y="475" width="214" height="54" rx="27" fill="#fff"/>
+  <text x="457" y="510" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="19" font-weight="700" fill="#1B365D">Currently on standby</text>
+</svg>

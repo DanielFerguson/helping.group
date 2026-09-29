@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f8f7f3;
+  --color-paper-deep: #efeee9;
+  --color-ink: #19221c;
+  --color-ink-soft: #59635c;
+  --color-forest: #24543a;
+  --color-forest-deep: #173725;
+  --color-leaf: #4c7055;
+  --color-leaf-bright: #93bd8b;
+  --color-mint: #e5eee5;
+  --color-sky: #d8e8eb;
+  --color-rust: #b8563d;
+  --color-sun: #efbc63;
+  --font-sans: Inter, "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+  --font-display: Inter, "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+  --shadow-soft: 0 16px 48px rgb(23 63 42 / 0.07);
+  --shadow-card: 0 6px 20px rgb(23 35 27 / 0.05);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background: var(--color-paper);
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-leaf);
+    color: white;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-rust);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  .shell {
+    width: min(100% - 2rem, 74rem);
+    margin-inline: auto;
+  }
+
+  .section-space {
+    padding-block: clamp(4rem, 7vw, 6.5rem);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-forest);
+    font-size: 0.85rem;
+    font-weight: 650;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+  }
+
+  .display-title {
+    max-width: 15ch;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.06;
+  }
+
+  .section-title {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 3.6vw, 3rem);
+    font-weight: 550;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+
+  .body-large {
+    color: var(--color-ink-soft);
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .button-light {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .button-primary {
+    background: var(--color-forest);
+    color: white;
+  }
+
+  .button-primary:hover {
+    background: var(--color-forest-deep);
+  }
+
+  .button-secondary {
+    border-color: rgb(23 63 42 / 0.24);
+    color: var(--color-forest);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--color-forest);
+    background: rgb(255 255 255 / 0.55);
+  }
+
+  .button-light {
+    background: white;
+    color: var(--color-forest);
+  }
+
+  .button-light:hover {
+    background: var(--color-mint);
+  }
+
+  .arrow {
+    transition: transform 160ms ease;
+  }
+
+  a:hover .arrow {
+    transform: translateX(0.25rem);
+  }
+
+  .card {
+    border: 1px solid rgb(23 63 42 / 0.12);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.72);
+  }
+
+  .project-prose {
+    color: var(--color-ink-soft);
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .project-prose h2 {
+    margin-top: 3.25rem;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    line-height: 1.14;
+  }
+
+  .project-prose p {
+    margin-top: 1.2rem;
+  }
+}
+
+.civic-grid {
+  background-image:
+    linear-gradient(rgb(23 63 42 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(23 63 42 / 0.06) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 1rem;
+  left: 1rem;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background: var(--color-ink);
+  color: white;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 639px) {
+  .shell {
+    width: min(100% - 1.25rem, 74rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

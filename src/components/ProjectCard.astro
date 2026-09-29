@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+type Props = {
+  project: CollectionEntry<'projects'>
+  featured?: boolean
+  headingLevel?: 'h2' | 'h3'
+}
+
+const { project, featured = false, headingLevel = 'h3' } = Astro.props
+const { data } = project
+const Heading = headingLevel
+---
+
+<article
+  class:list={[
+    'card group overflow-hidden',
+    featured && 'grid md:grid-cols-[0.85fr_1.15fr]',
+  ]}
+>
+  <div
+    class:list={[
+      'overflow-hidden bg-paper-deep',
+      featured ? 'min-h-64 md:min-h-full' : 'aspect-[16/9]',
+    ]}
+  >
+    <img
+      src={data.hero}
+      alt={data.heroAlt}
+      width="1200"
+      height="630"
+      loading={featured ? 'eager' : 'lazy'}
+      class="size-full object-cover"
+    />
+  </div>
+  <div class:list={['flex flex-col', featured ? 'p-7 sm:p-10' : 'p-6']}>
+    <div class="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.04em]">
+      <span
+        class:list={[
+          'border-l-2 pl-2',
+          data.status === 'standby'
+            ? 'border-leaf text-forest'
+            : 'border-forest/25 text-ink-soft',
+        ]}
+      >
+        {data.status === 'standby' ? 'On standby' : 'Archived'}
+      </span>
+      <span class="text-ink-soft">{data.period}</span>
+    </div>
+    <Heading
+      class:list={[
+        'mt-5 font-display font-semibold tracking-[-0.03em] text-ink',
+        featured ? 'text-3xl sm:text-4xl' : 'text-2xl',
+      ]}
+    >
+      <a class="hover:text-forest" href={`/projects/${data.slug}`}>
+        {data.title}
+      </a>
+    </Heading>
+    <p
+      class:list={[
+        'mt-4 leading-7 text-ink-soft',
+        featured ? 'text-lg' : 'text-base',
+      ]}
+    >
+      {data.summary}
+    </p>
+    <a
+      class="mt-7 inline-flex min-h-11 items-center gap-2 self-start font-semibold text-forest"
+      href={`/projects/${data.slug}`}
+    >
+      {data.status === 'standby' ? 'Explore the service' : 'Read the case study'}
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
