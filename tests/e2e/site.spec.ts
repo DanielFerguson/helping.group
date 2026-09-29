@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { organisation } from '../../src/data/organisation'
 
 const publicRoutes = [
   '/',
@@ -142,4 +143,91 @@ test.describe('accessibility', () => {
       expect(results.violations).toEqual([])
     })
   }
+})
+
+test.describe('charity verification', () => {
+  for (const route of publicRoutes) {
+    test(`${route} shows the ABN and links to the ACNC register`, async ({
+      page,
+    }) => {
+      await page.goto(route)
+      const footer = page.locator('footer')
+
+      await expect(footer).toContainText(`ABN ${organisation.abnDisplay}`)
+      await expect(footer).toContainText('Wadawurrung')
+      await expect(
+        footer.locator(`a[href="${organisation.acnc.profileUrl}"]`),
+      ).toHaveCount(1)
+      await expect(
+        page
+          .getByRole('banner')
+          .locator(`a[href="${organisation.acnc.profileUrl}"]`),
+      ).toBeVisible()
+    })
+  }
+})
+
+test('the verification band links to both public registers', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const band = page.getByTestId('verification-band')
+
+  await expect(band).toContainText(organisation.abnDisplay)
+  await expect(band).toContainText('6 August 2020')
+  await expect(
+    band.locator(`a[href="${organisation.abnLookupUrl}"]`),
+  ).toBeVisible()
+  await expect(
+    band.locator(`a[href="${organisation.acnc.profileUrl}"]`).first(),
+  ).toBeVisible()
+})
+
+test('the responsible people match the register data', async ({ page }) => {
+  for (const route of ['/', '/about']) {
+    await page.goto(route)
+    const governance = page.locator('#governance')
+
+    for (const person of organisation.responsiblePeople) {
+      await expect(
+        governance.getByRole('rowheader', { name: person.name }),
+      ).toBeVisible()
+    }
+    await expect(
+      governance.locator(`a[href="${organisation.acnc.peopleUrl}"]`),
+    ).toBeVisible()
+  }
+})
+
+test('the homepage warns that Helping Group never asks for money', async ({
+  page,
+}) => {
+  await page.goto('/')
+
+  await expect(page.getByTestId('donations-notice')).toContainText(
+    'We never ask for donations',
+  )
+})
+
+test('structured data identifies the charity by its ABN', async ({ page }) => {
+  await page.goto('/')
+  const json = await page
+    .locator('script[type="application/ld+json"]')
+    .textContent()
+  const items = JSON.parse(json ?? '[]') as Array<Record<string, unknown>>
+  const charity = items.find((item) => item['@type'] === 'NGO')
+
+  expect(charity?.taxID).toBe(organisation.abnDisplay)
+  expect(charity?.sameAs).toContain(organisation.acnc.profileUrl)
+})
+
+test('the homepage never scrolls sideways', async ({ page }) => {
+  await page.goto('/')
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  )
+
+  expect(overflow).toBeLessThanOrEqual(0)
 })
