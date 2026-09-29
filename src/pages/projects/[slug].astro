@@ -2,14 +2,13 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content'
 import SiteFooter from '../../components/SiteFooter.astro'
 import SiteHeader from '../../components/SiteHeader.astro'
-import StatusPanel from '../../components/StatusPanel.astro'
-import { helpingHomesStatus } from '../../data/helping-homes-status'
-import { organisation } from '../../data/organisation'
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import { getStatusPresentation } from '../../lib/status'
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects')
+  const projects = await getCollection(
+    'projects',
+    (project) => project.data.status === 'archived',
+  )
 
   return projects.map((project) => ({
     params: { slug: project.data.slug },
@@ -24,7 +23,6 @@ type Props = {
 const { project } = Astro.props
 const { Content } = await render(project)
 const { data } = project
-const showServiceAction = getStatusPresentation(helpingHomesStatus).showServiceAction
 const projectData = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -79,20 +77,7 @@ const projectData = {
       </div>
     </section>
 
-    {data.slug === 'helping-homes' && (
-      <section class="section-space">
-        <div class="shell">
-          <StatusPanel />
-          {!showServiceAction && (
-            <a class="button-primary mt-6 w-full sm:w-80" href={`mailto:${organisation.contactEmail}`}>
-              Contact Helping Group <span class="arrow text-leaf" aria-hidden="true">→</span>
-            </a>
-          )}
-        </div>
-      </section>
-    )}
-
-    <section class:list={['section-space', data.slug !== 'helping-homes' && 'bg-paper-deep']}>
+    <section class="section-space bg-paper-deep">
       <div class="shell border-y border-forest/15">
         {[
           ['The challenge', data.challenge],
