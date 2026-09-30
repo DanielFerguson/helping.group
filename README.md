@@ -69,7 +69,12 @@ danger must be directed to call 000 and follow official emergency advice.
 Archived project pages are generated from `src/content/projects` (Helping
 Homes has its own page and only uses its metadata from there). Their frontmatter
 is validated by `src/content.config.ts`; `hero` is used only for the social
-card image, since the pages themselves carry no imagery. Historical articles and
+card image, since the pages themselves carry no imagery.
+
+Social cards live in `public/og` as 1200×630 PNGs, one per page. They're
+designed on the "Social cards — OG 1200×630" page of the Paper file. To change
+one, edit it in Paper, export at 1x, and run it through sharp as a palette PNG
+(`png({ palette: true, colours: 128, effort: 10 })`) to keep it around 20KB. Historical articles and
 verified press links are curated in `src/data/archive.ts`.
 
 Only publish claims that can be traced to a listed source. Archived projects
