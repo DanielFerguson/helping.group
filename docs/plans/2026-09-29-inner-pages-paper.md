@@ -20,7 +20,7 @@
 - **Write small:** Each `write_html` call adds one visual group (a heading block, one table row, one button pair). Name every frame with `layer-name`.
 - **No margins, grids or tables in HTML.** Use flex, padding and gap, as `write_html` requires.
 - **Finish:** Call `finish_working_on_nodes` with the artboard IDs at the end of every task.
-- **Contact email:** Use `contact@helpinggroup.com.au`, the address on the ACNC register, which `organisation.ts` uses as of commit `0b91a94`. The homepage artboards still say `contact@helping.group`. After cloning the Footer or Governance, run `find_nodes({ textValue: "*helping.group*" })` on the new artboard and fix each match with `set_text_content`.
+- **Contact email:** Use `contact@helping.group`, the address on the ACNC register, which `organisation.ts` uses as of commit `0b91a94`. The homepage artboards still say `contact@helping.group`. After cloning the Footer or Governance, run `find_nodes({ textValue: "*helping.group*" })` on the new artboard and fix each match with `set_text_content`.
 
 ### Type and layout values (taken from the homepage)
 
@@ -215,7 +215,7 @@ P4.
 
 **Step 6, App unavailable (desktop, hero only):** `duplicate_nodes` the activated desktop artboard, rename it "B · Helping Homes · Activated, app unavailable — Hero", delete every section after the Hero, and position it below the activated desktop artboard. In place of the primary button, add an activated notice block (a 6px rust top rule, a white panel, 24px padding):
 - Title **The app is temporarily unavailable.**
-- Body *Use official emergency information, or contact us at contact@helpinggroup.com.au.*
+- Body *Use official emergency information, or contact us at contact@helping.group.*
 
 This is based on `availabilityNote` in `status.ts`.
 

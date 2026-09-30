@@ -149,7 +149,7 @@ A full-height ink or white panel below the header. It lists the nav items at a g
 
 1. **How activation is decided.** The Helping Group board decides, when Australia has a natural disaster and when good Samaritans are offering temporary accommodation for its victims at a level and scale that requires our intervention. Confirmed by the user, 29 Sep 2026.
 2. **The map on standby.** The Helping Homes app shows its map while on standby. Offers older than two weeks that haven't been reconfirmed are removed automatically, so for most of the year there are very few or no offers. Confirmed by the user, 29 Sep 2026.
-3. **The email mismatch.** Resolved in `0b91a94`: the site uses `contact@helpinggroup.com.au`. The Paper artboards now show the same address.
+3. **The email mismatch.** Resolved in `0b91a94`: the site uses `contact@helping.group`. The Paper artboards now show the same address.
 4. **Dated record on About** (Summer 2019–20, 6 Aug 2020, 2020–21, Today). The user confirmed the dates.
 5. **Other choices.** The user approved the sample activation incident, the new 404 header and footer, and the Archive "On this page" index. The mobile menu stays white with the long ACNC chip in the panel.
 

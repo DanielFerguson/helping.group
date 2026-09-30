@@ -30,7 +30,7 @@ export const organisation = {
   name: 'Helping Group',
   abn,
   abnDisplay: formatAbn(abn),
-  contactEmail: 'contact@helpinggroup.com.au',
+  contactEmail: 'contact@helping.group',
   acnc: {
     registeredOn: '2020-08-06',
     profileUrl: `${acncCharityUrl}/profile`,
