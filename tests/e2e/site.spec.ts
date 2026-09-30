@@ -34,6 +34,18 @@ test.describe('public routes', () => {
         new RegExp(`https://helping\\.group${route === '/' ? '/?' : route}`),
       )
     })
+
+    test(`${route} has a social card from public/og`, async ({ page, request }) => {
+      await page.goto(route)
+
+      const image = await page.locator('meta[property="og:image"]').getAttribute('content')
+      expect(image).toMatch(/^https:\/\/helping\.group\/og\/[a-z-]+\.png$/)
+      await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /.+/)
+
+      const card = await request.get(new URL(image!).pathname)
+      expect(card.ok()).toBe(true)
+      expect(card.headers()['content-type']).toBe('image/png')
+    })
   }
 })
 

@@ -4,8 +4,8 @@ slug: whats-my-impact
 summary: An archived concept for making the social and environmental effects of investments easier to understand.
 period: Archived project
 status: archived
-hero: /projects/whats-my-impact.png
-heroAlt: Abstract connected circles representing investments and their wider effects
+hero: /og/whats-my-impact.png
+heroAlt: "What’s My Impact?, an archived Helping Group project: making the social and environmental effects of investments easier to understand."
 challenge: The consequences of an investment can be difficult to see, making it harder for people to compare what they own with the values they want their money to support.
 response: What’s My Impact? explored ways to visualise those connections and make the trade-offs behind investment choices more legible.
 outcome: The concept is no longer an active Helping Group project and its former domain has been retired. It remains part of the project archive.

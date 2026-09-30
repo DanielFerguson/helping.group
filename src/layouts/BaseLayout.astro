@@ -7,7 +7,9 @@ import { organisation } from '../data/organisation'
 type Props = {
   title: string
   description: string
+  /** A 1200×630 PNG in public/og, designed on the "Social cards" page in Paper. */
   image?: string
+  imageAlt?: string
   noIndex?: boolean
   structuredData?: Record<string, unknown> | Record<string, unknown>[]
 }
@@ -15,7 +17,8 @@ type Props = {
 const {
   title,
   description,
-  image = '/social-card.png',
+  image = '/og/default.png',
+  imageAlt = 'Helping Group: practical support in difficult moments. A verified ACNC-registered charity.',
   noIndex = false,
   structuredData,
 } = Astro.props
@@ -76,15 +79,16 @@ const jsonLd: Record<string, unknown>[] = [
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
-    <meta
-      property="og:image:alt"
-      content="Helping Group — practical digital tools for people facing emergencies"
-    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <script
       type="application/ld+json"

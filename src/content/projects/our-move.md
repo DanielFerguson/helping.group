@@ -4,8 +4,8 @@ slug: our-move
 summary: An archived platform concept for helping communities prepare together before bushfire seasons.
 period: Archived project
 status: archived
-hero: /projects/our-move.png
-heroAlt: Abstract landscape and pathway representing community bushfire preparation
+hero: /og/our-move.png
+heroAlt: "Our Move, an archived Helping Group project: a platform concept for helping communities prepare together before bushfire seasons."
 challenge: Bushfire preparation involves many small actions across homes and neighbourhoods, but the work can feel fragmented and difficult to coordinate.
 response: Our Move explored a communal platform that could bring people together around practical preparation before a fire season began.
 outcome: The platform is no longer operating and the original domain has been retired. The project is preserved as an archived part of Helping Group’s history.
